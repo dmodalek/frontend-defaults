@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Analyzers TSLintAnalyzer should analyze a project with installation correctly 1`] = `
+Object {
+  "tslint": true,
+  "tslintInstallation": "5.12.1",
+}
+`;
+
+exports[`Analyzers TSLintAnalyzer should analyze a project without installation correctly 1`] = `
+Object {
+  "tslint": true,
+  "tslintInstallation": false,
+}
+`;
+
+exports[`Analyzers TSLintAnalyzer should analyze a project without tslint correctly 1`] = `
+Object {
+  "tslint": false,
+}
+`;

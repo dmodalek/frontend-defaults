@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Analyzers ESLintAnalyzer should analyze a project with installation correctly 1`] = `
+Object {
+  "eslint": true,
+  "eslintIgnore": true,
+  "eslintInstallation": "5.12.1",
+}
+`;
+
+exports[`Analyzers ESLintAnalyzer should analyze a project without ignore & installation correctly 1`] = `
+Object {
+  "eslint": true,
+  "eslintIgnore": false,
+  "eslintInstallation": false,
+}
+`;

@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Analyzers WebpackAnalyzer should analyze a project and find configs as well as plugins correctly 1`] = `
+Object {
+  "webpack": true,
+  "webpackConfigurations": Array [
+    "webpack.config.js",
+    "webpack.prod.config.js",
+  ],
+  "webpackInstallation": "4.29.0",
+  "webpackInstalledDependencies": Array [
+    "webpack",
+    "html-webpack-plugin",
+    "ts-config-webpack-plugin",
+  ],
+}
+`;
+
+exports[`Analyzers WebpackAnalyzer should analyze a project with installation correctly 1`] = `
+Object {
+  "webpack": true,
+  "webpackConfigurations": Array [
+    "webpack.config.js",
+    "webpack.prod.config.js",
+  ],
+  "webpackInstallation": "4.29.0",
+  "webpackInstalledDependencies": Array [
+    "webpack",
+    "html-webpack-plugin",
+    "ts-config-webpack-plugin",
+  ],
+}
+`;

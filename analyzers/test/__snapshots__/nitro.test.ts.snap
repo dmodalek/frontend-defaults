@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Analyzers NitroAnalyzer should analyze a project with installation and configs correctly 1`] = `
+Object {
+  "nitro": true,
+  "nitroVersion": "4.3.2",
+  "nitroViewEngine": "hbs",
+}
+`;
+
+exports[`Analyzers NitroAnalyzer should analyze a project without nitro installation correctly 1`] = `
+Object {
+  "nitro": true,
+  "nitroVersion": false,
+  "nitroViewEngine": "hbs",
+}
+`;
+
+exports[`Analyzers NitroAnalyzer should analyze a project without nitro template setting correctly 1`] = `
+Object {
+  "nitro": true,
+  "nitroVersion": "4.3.2",
+  "nitroViewEngine": "default",
+}
+`;

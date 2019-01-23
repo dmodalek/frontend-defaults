@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Analyzers TypeScriptAnalyzer should analyze a project with installation correctly 1`] = `
+Object {
+  "typescript": true,
+  "typescriptInstallation": "3.2.4",
+}
+`;
+
+exports[`Analyzers TypeScriptAnalyzer should analyze a project without installation correctly 1`] = `
+Object {
+  "typescript": true,
+  "typescriptInstallation": false,
+}
+`;

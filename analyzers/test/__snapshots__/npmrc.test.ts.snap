@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Analyzers NPMRCAnalyzer should analyze a project with npmrc and save-exact correctly 1`] = `
+Object {
+  "npmrc": true,
+  "npmrcSaveExactEnabled": true,
+}
+`;
+
+exports[`Analyzers NPMRCAnalyzer should analyze a project without npmrc correctly 1`] = `
+Object {
+  "npmrc": false,
+}
+`;
