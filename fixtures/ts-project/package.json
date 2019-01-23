@@ -1,0 +1,8 @@
+{
+  "name": "fixture-default-project",
+  "version": "0.0.1",
+  "private": false,
+  "devDependencies": {
+    "typescript": "3.2.4"
+  }
+}

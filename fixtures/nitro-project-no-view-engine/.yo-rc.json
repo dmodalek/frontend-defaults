@@ -1,0 +1,8 @@
+{
+	"generator-nitro": {
+		"name": "project-nitro",
+		"clientTemplates": true,
+		"exampleCode": true,
+		"exporter": true
+	}
+}

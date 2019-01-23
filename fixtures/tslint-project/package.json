@@ -1,0 +1,8 @@
+{
+  "name": "fixture-default-project",
+  "version": "0.0.1",
+  "private": false,
+  "devDependencies": {
+    "tslint": "5.12.1"
+  }
+}

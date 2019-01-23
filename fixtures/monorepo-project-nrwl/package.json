@@ -1,0 +1,8 @@
+{
+  "name": "fixture-monorepo-lerna-project",
+  "version": "0.0.1",
+  "private": false,
+  "devDependencies": {
+    "@nrwl/nx": "6.2.0"
+  }
+}

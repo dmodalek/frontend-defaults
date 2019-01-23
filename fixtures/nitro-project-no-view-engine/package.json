@@ -1,0 +1,8 @@
+{
+  "name": "fixture-default-project",
+  "version": "0.0.1",
+  "private": false,
+  "devDependencies": {
+    "generator-nitro": "4.3.2"
+  }
+}

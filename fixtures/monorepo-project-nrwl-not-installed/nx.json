@@ -1,0 +1,11 @@
+{
+	"npmScope": "nx-examples",
+	"projects": {
+		"example": {
+			"tags": ["test-suite"]
+		}
+	},
+	"implicitDependencies": {
+		"nx.json": "*"
+	}
+}
