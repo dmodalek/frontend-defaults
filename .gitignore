@@ -12,4 +12,7 @@ npm-debug.log
 yarn-error.log
 lerna-debug.log
 
+# Compiled output
+dist
+
 todo.md
