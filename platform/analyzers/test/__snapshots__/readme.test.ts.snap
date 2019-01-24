@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Analyzers ReadmeAnalyzer should analyze a project with readme correctly 1`] = `
+Object {
+  "readme": true,
+}
+`;
+
+exports[`Analyzers ReadmeAnalyzer should analyze a project without readme correctly 1`] = `
+Object {
+  "readme": false,
+}
+`;

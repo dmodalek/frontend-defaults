@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Analyzers LicenseAnalyzer should analyze a project with license correctly 1`] = `
+Object {
+  "license": true,
+}
+`;
+
+exports[`Analyzers LicenseAnalyzer should analyze a project without npmrc correctly 1`] = `
+Object {
+  "license": false,
+}
+`;

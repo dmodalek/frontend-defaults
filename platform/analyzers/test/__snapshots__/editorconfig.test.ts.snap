@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Analyzers EditorconfigAnalyzer should analyze a project with editorconfig correctly 1`] = `
+Object {
+  "editorConfig": true,
+}
+`;
+
+exports[`Analyzers EditorconfigAnalyzer should analyze a project without editorconfig correctly 1`] = `
+Object {
+  "editorConfig": false,
+}
+`;

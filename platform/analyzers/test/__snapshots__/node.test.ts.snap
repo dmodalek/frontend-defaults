@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Analyzers NodeAnalyzer should analyze a project with node-version correctly 1`] = `
+Object {
+  "nodeVersion": true,
+  "nodeVersionManager": "node-version",
+  "nodeVersionSelectedVersion": "10.0.0",
+}
+`;
+
+exports[`Analyzers NodeAnalyzer should analyze a project with nvmrc correctly 1`] = `
+Object {
+  "nodeVersion": true,
+  "nodeVersionManager": "nvm",
+  "nodeVersionSelectedVersion": "10.0.0",
+}
+`;
+
+exports[`Analyzers NodeAnalyzer should analyze a project without node meta configuration 1`] = `
+Object {
+  "nodeVersion": false,
+}
+`;

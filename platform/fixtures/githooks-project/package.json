@@ -1,0 +1,8 @@
+{
+  "name": "fixture-default-project",
+  "version": "0.0.1",
+  "private": false,
+  "devDependencies": {
+    "husky": "1.3.1"
+  }
+}
