@@ -3,13 +3,20 @@ import { ProjectValidator } from './ProjectValidator';
 
 export interface IPatch {
 	id: string;
-	apply(): Promise<Error | void>;
+	patch(): Promise<Error | void>;
 }
+
+type PatchConstructorOptions<A> = {
+	analyzer: IProjectAnalyzer<A>;
+};
 
 export abstract class Patch<A> implements IPatch {
 	public id: 'patch';
+	private analyzer: IProjectAnalyzer<A>;
 
-	constructor(protected analyzer: IProjectAnalyzer<A>) {}
+	constructor({ analyzer }: PatchConstructorOptions<A>) {
+		this.analyzer = analyzer;
+	}
 
-	abstract async apply(): Promise<Error | void>;
+	abstract async patch(): Promise<Error | void>;
 }
