@@ -1,0 +1,2 @@
+# keep node modules as they're just fake modules for testing purposes without contents
+!node_modules
