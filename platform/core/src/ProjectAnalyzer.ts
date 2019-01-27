@@ -6,7 +6,7 @@ import { Constructable } from './types/Constructable';
 import { PackageAnalyzer } from './PackageAnalyzer';
 
 type ProjectAnalyzerConstructionOptions = {
-	context: string;
+	context?: string;
 	analyzers: Constructable<IAnalyzer<any>>[];
 };
 
@@ -29,9 +29,14 @@ export class ProjectAnalyzer<Analytics extends Object = {}> implements IProjectA
 	public packageAnalyzer: PackageAnalyzer = new PackageAnalyzer(null);
 	private analyzers: Constructable<IAnalyzer<any>>[];
 
+	/**
+	 * Creates a new project analyzer within a context and certain analyzers.
+	 * Context is optional, default value will your working directory `process.cwd()`.
+	 * @param { context?: string, analyzers: IAnalyzer<any>[] }
+	 */
 	constructor({ context, analyzers }: ProjectAnalyzerConstructionOptions) {
 		this.analyzers = analyzers;
-		this.context = context;
+		this.context = context || process.cwd();
 	}
 
 	/**

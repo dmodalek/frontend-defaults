@@ -30,7 +30,7 @@ export class ValidationException extends Error {
 	}
 
 	toString() {
-		return `ValidationEception ${this.source}: ${this.message} [${this.level}]`;
+		return `Validate ${this.source}: ${this.message} [${this.level}]`;
 	}
 }
 

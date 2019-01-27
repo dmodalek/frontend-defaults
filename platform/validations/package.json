@@ -31,10 +31,6 @@
     "@namics/ts-config": "*",
     "@types/jest": "23.3.11",
     "@types/node": "10.12.5",
-    "@types/latest-version": "4.0.0",
-    "@types/semver": "5.5.0",
-    "latest-version": "4.0.0",
-    "semver": "5.6.0",
     "jest": "23.6.0",
     "ts-jest": "23.10.5",
     "typescript": "3.1.6",
@@ -42,6 +38,8 @@
     "rimraf": "2.6.3"
   },
   "dependencies": {
-    "@namics/frontend-defaults-platform-core": "0.1.0"
+    "@namics/frontend-defaults-platform-core": "0.1.0",
+    "@namics/frontend-defaults-platform-analyzers": "0.1.0",
+    "@namics/frontend-defaults-platform-test-fixtures": "1.0.0"
   }
 }
