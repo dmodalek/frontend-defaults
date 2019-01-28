@@ -31,6 +31,8 @@
     "@namics/ts-config": "*",
     "@types/jest": "23.3.11",
     "@types/node": "10.12.5",
+    "@types/latest-version": "4.0.0",
+    "latest-version": "4.0.0",
     "jest": "23.6.0",
     "ts-jest": "23.10.5",
     "typescript": "3.1.6",

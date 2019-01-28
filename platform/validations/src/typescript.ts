@@ -6,8 +6,6 @@ import {
 	ValidationExceptionLevel,
 } from '@namics/frontend-defaults-platform-core';
 
-// export type TypeScriptValidationResult = {};
-
 export class TypeScriptValidation extends Validation<TypeScriptAnalyzerResult> {
 	async validate(): Promise<ValidationException[]> {
 		if (!this.analyzer.analytics.typescript) {
@@ -24,7 +22,9 @@ export class TypeScriptValidation extends Validation<TypeScriptAnalyzerResult> {
 					message: `Using TypeScript without explicit installtion is not allowed`,
 					source: 'TypeScriptValidation',
 					level: ValidationExceptionLevel.error,
-					patch: 'TypeScriptInstallationPatch',
+					patches: [{
+						patch: 'TypeScriptInstallationPatch'
+					}],
 				})
 			);
 		} else {
@@ -36,7 +36,13 @@ export class TypeScriptValidation extends Validation<TypeScriptAnalyzerResult> {
 						message: `Please update TypeScript to v${update.latest} (installed: v${update.current})`,
 						source: 'TypeScriptValidation',
 						level: ValidationExceptionLevel.info,
-						// patch: 'TypeScriptUpdatePatch'
+						patches: [{
+							patch: 'TypeScriptUpdatePatch',
+							arguments: {
+								current: update.current,
+								latest: update.latest
+							}
+						}],
 					})
 				);
 			}
