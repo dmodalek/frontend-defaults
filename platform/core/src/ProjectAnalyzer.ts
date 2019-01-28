@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { getJSON } from './utils/fs';
+import { getJSON, displayPath } from './utils/fs';
 import { IAnalyzer, AnalyzerConfiguration } from './Analyzer';
 import { IPackage } from './types/Package';
 import { Constructable } from './types/Constructable';
@@ -48,20 +48,21 @@ export class ProjectAnalyzer<Analytics extends Object = {}> implements IProjectA
 	 */
 	async boot() {
 		try {
-			this.package = await getJSON<IPackage>(join(this.context, 'package.json'));
+			let pkg = await getJSON<IPackage>(join(this.context, 'package.json'));
 			if ((this.package as NodeJS.ErrnoException).code === 'ENOENT') {
-				throw new Error(`No valid project found in context ${this.context}`);
+				throw new Error(`No valid project found in context ${displayPath(this.context)}`);
 			}
+			pkg = this.setSavePackageAccessForAnalyzers(pkg);
+			this.package = pkg;
 
 			this.packageAnalyzer = new PackageAnalyzer(this.package);
-			this.setSavePackageAccessForAnalyzers();
 			this.analytics = await this.runAnalyzers();
 			this.initialAnalyzationDone = true;
 
 			// make chainable for analytics information
 			return this;
 		} catch (err) {
-			throw new Error(`Can't start analytics due missing package.json in ${this.context}`);
+			throw new Error(`Can't start analytics due missing package.json in ${displayPath(this.context)}`);
 		}
 	}
 
@@ -88,15 +89,16 @@ export class ProjectAnalyzer<Analytics extends Object = {}> implements IProjectA
 	 * to prevent undefined accessor failures
 	 * @return void
 	 */
-	private setSavePackageAccessForAnalyzers(): void {
-		if (!this.package) {
-			this.package = {};
+	private setSavePackageAccessForAnalyzers(pkg: IPackage | null): IPackage {
+		if (!pkg) {
+			pkg = {};
 		}
 
-		this.package.dependencies = this.package.dependencies || {};
-		this.package.devDependencies = this.package.devDependencies || {};
-		this.package.peerDependencies = this.package.peerDependencies || {};
-		this.package.engines = this.package.engines || {};
+		pkg.dependencies = pkg.dependencies || {};
+		pkg.devDependencies = pkg.devDependencies || {};
+		pkg.peerDependencies = pkg.peerDependencies || {};
+		pkg.engines = pkg.engines || {};
+		return pkg;
 	}
 
 	/**

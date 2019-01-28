@@ -6,17 +6,10 @@ export interface IPatch {
 	patch(): Promise<Error | void>;
 }
 
-type PatchConstructorOptions<A> = {
-	analyzer: IProjectAnalyzer<A>;
-};
+export abstract class Patch<A extends any = void> implements IPatch {
+	public id: 'abstractPatchClass';
 
-export abstract class Patch<A> implements IPatch {
-	public id: 'patch';
-	private analyzer: IProjectAnalyzer<A>;
-
-	constructor({ analyzer }: PatchConstructorOptions<A>) {
-		this.analyzer = analyzer;
-	}
+	constructor(protected options: A) { }
 
 	abstract async patch(): Promise<Error | void>;
 }

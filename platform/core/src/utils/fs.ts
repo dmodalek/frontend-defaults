@@ -65,3 +65,5 @@ export async function fileExists(path: string): Promise<boolean> {
 export async function findFilesByPattern(cwd: string = process.cwd(), pattern: string | string[]): Promise<string[]> {
 	return await globby(pattern, { cwd });
 }
+
+export const displayPath = (selectedPath: string) => selectedPath.replace(process.cwd(), '');
