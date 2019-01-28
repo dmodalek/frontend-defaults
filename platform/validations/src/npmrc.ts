@@ -11,7 +11,7 @@ export class NPMRCValidation extends Validation<NPMRCAnalyzerResult> {
                 new ValidationException({
                     message: `No .npmrc file found to reference to the correct node version`,
                     source: 'NPMRCValidation',
-                    patches: [{ patch: 'CreateNPMRCPatch' }],
+                    patches: [{ patch: 'NPMRCPatch' }],
                     level: ValidationExceptionLevel.error,
                 })
             );
@@ -23,7 +23,7 @@ export class NPMRCValidation extends Validation<NPMRCAnalyzerResult> {
                 new ValidationException({
                     message: `Save exact is not enabled in your .npmrc file`,
                     source: 'NPMRCValidation',
-                    patches: [{ patch: 'AddSaveExactToNPMRCPatch' }],
+                    patches: [{ patch: 'NPMRCPatch' }],
                     level: ValidationExceptionLevel.warning,
                 })
             );
