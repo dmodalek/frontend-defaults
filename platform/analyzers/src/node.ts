@@ -1,23 +1,28 @@
 import { Analyzer, fileExists, getFileContents } from '@namics/frontend-defaults-platform-core';
 import { join } from 'path';
 
-export type NodeAnalyzerManagerType = 'nvm' | 'node-version';
+export enum NodeAnalyzerManagerType {
+	'nvm' = 'nvm',
+	'node-version' = 'node-version'
+}
+
+type NodeAnalyzerManagerInfoType = {
+	[managerType in NodeAnalyzerManagerType]: string | boolean;
+}
 
 export type NodeAnalyzerResult = {
 	nodeVersion: boolean;
-	nodeVersionSelectedVersion?: string;
-	nodeVersionManager?: NodeAnalyzerManagerType;
+	nodeVersionManagerInfo?: NodeAnalyzerManagerInfoType;
 };
 
 export class NodeAnalyzer extends Analyzer<NodeAnalyzerResult> {
 	async analyze(): Promise<NodeAnalyzerResult> {
-		const localVersionFile = await this.getLocalVersionFile();
+		const localVersionFiles = await this.getLocalVersionFile();
 
-		if (localVersionFile) {
+		if (localVersionFiles.exist) {
 			return {
 				nodeVersion: true,
-				nodeVersionSelectedVersion: localVersionFile.content.trim(),
-				nodeVersionManager: localVersionFile.manager,
+				nodeVersionManagerInfo: localVersionFiles.managers,
 			};
 		}
 
@@ -26,24 +31,37 @@ export class NodeAnalyzer extends Analyzer<NodeAnalyzerResult> {
 		};
 	}
 
-	async getLocalVersionFile(): Promise<false | { manager: NodeAnalyzerManagerType; content: string }> {
+	async getLocalVersionFile(): Promise<{ exist: boolean, managers: NodeAnalyzerManagerInfoType }> {
+		const allManagers: NodeAnalyzerManagerInfoType = {
+			[NodeAnalyzerManagerType["node-version"]]: false,
+			[NodeAnalyzerManagerType.nvm]: false,
+		};
 		const nodeVersionFileExists = await fileExists(this.nodeVersionPath);
-		if (nodeVersionFileExists) {
-			return {
-				manager: 'node-version',
-				content: await getFileContents(this.nodeVersionPath),
-			};
-		}
-
 		const nvmrcFileExists = await fileExists(this.nvmrcPath);
-		if (nvmrcFileExists) {
-			return {
-				manager: 'nvm',
-				content: await getFileContents(this.nvmrcPath),
-			};
+
+		if (nodeVersionFileExists) {
+			allManagers["node-version"] = await this.extractVersionFromFile(this.nodeVersionPath);
 		}
 
-		return false;
+		if (nvmrcFileExists) {
+			allManagers.nvm = await this.extractVersionFromFile(this.nvmrcPath);
+		}
+
+		return {
+			exist: nvmrcFileExists || nodeVersionFileExists,
+			managers: allManagers
+		};
+	}
+
+	private async extractVersionFromFile(filePath: string) {
+		const contents = await getFileContents(filePath)
+		return contents.replace(/\r?\n|\r/g, '')
+			.replace('^', '')
+			.replace('~', '')
+			.replace('>', '')
+			.replace('>=', '')
+			.replace('<', '')
+			.replace('<=', '');
 	}
 
 	private get nodeVersionPath() {

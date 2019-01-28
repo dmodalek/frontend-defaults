@@ -3,16 +3,20 @@
 exports[`Analyzers NodeAnalyzer should analyze a project with node-version correctly 1`] = `
 Object {
   "nodeVersion": true,
-  "nodeVersionManager": "node-version",
-  "nodeVersionSelectedVersion": "10.0.0",
+  "nodeVersionManagerInfo": Object {
+    "node-version": "10.0.0",
+    "nvm": false,
+  },
 }
 `;
 
 exports[`Analyzers NodeAnalyzer should analyze a project with nvmrc correctly 1`] = `
 Object {
   "nodeVersion": true,
-  "nodeVersionManager": "nvm",
-  "nodeVersionSelectedVersion": "10.0.0",
+  "nodeVersionManagerInfo": Object {
+    "node-version": false,
+    "nvm": "10.0.0",
+  },
 }
 `;
 
