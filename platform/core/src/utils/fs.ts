@@ -45,10 +45,10 @@ export async function mergeJSON<Result extends Object>(
 				err
 					? reject(err)
 					: resolve({
-							merged: rawObjectMerge,
-							base: baseContents,
-							overrides: mergableContents,
-					  });
+						merged: rawObjectMerge,
+						base: baseContents,
+						overrides: mergableContents,
+					});
 			});
 		});
 	} catch (err) {

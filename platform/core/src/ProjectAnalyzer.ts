@@ -15,6 +15,7 @@ export interface IProjectAnalyzer<Analytics> {
 	analytics: Analytics;
 	package: IPackage | null;
 	packageAnalyzer: PackageAnalyzer;
+	initialAnalyzationDone: boolean
 }
 
 /**
@@ -27,6 +28,7 @@ export class ProjectAnalyzer<Analytics extends Object = {}> implements IProjectA
 	public analytics: Analytics;
 	public package: IPackage | null = null;
 	public packageAnalyzer: PackageAnalyzer = new PackageAnalyzer(null);
+	public initialAnalyzationDone = false;
 	private analyzers: Constructable<IAnalyzer<any>>[];
 
 	/**
@@ -47,9 +49,14 @@ export class ProjectAnalyzer<Analytics extends Object = {}> implements IProjectA
 	async boot() {
 		try {
 			this.package = await getJSON<IPackage>(join(this.context, 'package.json'));
+			if ((this.package as NodeJS.ErrnoException).code === 'ENOENT') {
+				throw new Error(`No valid project found in context ${this.context}`);
+			}
+
 			this.packageAnalyzer = new PackageAnalyzer(this.package);
 			this.setSavePackageAccessForAnalyzers();
 			this.analytics = await this.runAnalyzers();
+			this.initialAnalyzationDone = true;
 
 			// make chainable for analytics information
 			return this;

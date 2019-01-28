@@ -47,3 +47,26 @@ export async function checkDependencyUpdate(
 		};
 	}
 }
+
+export async function getLatestLTSVersion(dependency: string): Promise<string> {
+	return await latestVersion(dependency, {
+		version: 'lts'
+	});
+}
+
+export async function checkNewerLTSVersion(
+	dependency: string,
+	currentVersion: string
+): Promise<{
+	current?: string;
+	latest?: string;
+	upgradable: boolean;
+}> {
+	const latest = await getLatestLTSVersion(dependency);
+
+	return {
+		current: currentVersion,
+		latest,
+		upgradable: semver.lt(currentVersion, latest)
+	}
+}

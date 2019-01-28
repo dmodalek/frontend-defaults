@@ -1,5 +1,5 @@
 import { Constructable } from './types/Constructable';
-import { IValidation, ValidationException } from './Validation';
+import { IValidation, ValidationException, RequiredValidationPatch } from './Validation';
 import { ProjectAnalyzer } from './ProjectAnalyzer';
 
 type ProjectValidatorOptions = {
@@ -29,12 +29,16 @@ export class ProjectValidator<T> {
 	 * Validates the project against certain validations and will return a list
 	 * of required patches, which can be passed to the `ProjectPatcher.apply()` method.
 	 */
-	public async validate(): Promise<string[]> {
+	public async validate(): Promise<RequiredValidationPatch[]> {
 		// TODO: apply validators to the current project and save required patches
 		try {
 			this.validation = await this.runValidations();
 
-			return this.validation.map((validationException): string => validationException.patch!).filter(Boolean);
+			return Array.from(this.validation).reduce(
+				(prev: RequiredValidationPatch[], curr: ValidationException): RequiredValidationPatch[] => {
+					return [...prev, ...(curr.patches || [])]
+				}, [] as RequiredValidationPatch[]
+			);
 		} catch (err) {
 			// do nothing at the moment ...
 			return [];

@@ -10,21 +10,26 @@ export const enum ValidationExceptionLevel {
 type ValidationExceptionOptions = {
 	message: string;
 	source: string;
-	patch?: string;
+	patches?: RequiredValidationPatch[],
 	level: ValidationExceptionLevel;
 };
 
+export type RequiredValidationPatch = {
+	patch: string,
+	arguments?: any
+}
+
 export class ValidationException extends Error {
-	public patch: string | undefined;
+	public patches: RequiredValidationPatch[] | undefined;
 	public source: string = 'unknown';
 	public level: ValidationExceptionLevel = ValidationExceptionLevel.debug;
 
-	constructor({ message, source, level, patch }: ValidationExceptionOptions) {
+	constructor({ message, source, level, patches }: ValidationExceptionOptions) {
 		super(message);
 
 		this.source = source;
 		this.level = level;
-		this.patch = patch;
+		this.patches = patches;
 
 		Object.setPrototypeOf(this, new.target.prototype);
 	}
