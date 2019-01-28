@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Validations NodeValidations should recognize both managers and their updates 1`] = `
+Array [
+  Object {
+    "arguments": Object {
+      "current": "9.0.0",
+      "latest": "10.15.0",
+    },
+    "patch": "UpdateNVMPatch",
+  },
+  Object {
+    "arguments": Object {
+      "current": "9.0.0",
+      "latest": "10.15.0",
+    },
+    "patch": "UpdateNodeVersionPatch",
+  },
+]
+`;
+
+exports[`Validations NodeValidations should recognize need to install both managers 1`] = `
+Array [
+  Object {
+    "patch": "NVMInstallPatch",
+  },
+  Object {
+    "patch": "NodeVersionInstallPatch",
+  },
+]
+`;
+
+exports[`Validations NodeValidations should recognize the node-version manager, node-version update and nvm installation 1`] = `
+Array [
+  Object {
+    "patch": "NVMInstallPatch",
+  },
+  Object {
+    "arguments": Object {
+      "current": "10.0.0",
+      "latest": "10.15.0",
+    },
+    "patch": "UpdateNodeVersionPatch",
+  },
+]
+`;
+
+exports[`Validations NodeValidations should recognize the nvm manager, nvm update and node-version installation 1`] = `
+Array [
+  Object {
+    "arguments": Object {
+      "current": "10.0.0",
+      "latest": "10.15.0",
+    },
+    "patch": "UpdateNVMPatch",
+  },
+  Object {
+    "patch": "NodeVersionInstallPatch",
+  },
+]
+`;

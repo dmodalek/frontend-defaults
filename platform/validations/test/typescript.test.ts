@@ -1,6 +1,6 @@
 import { ProjectValidator, ProjectAnalyzer, ValidationExceptionLevel } from '@namics/frontend-defaults-platform-core';
 import { TypeScriptValidation } from '../src/typescript';
-import { getFixtureDir } from './utils';
+import { getFixtureDir, checkInternetConnection, getLatestVersion } from './utils';
 import { TypeScriptAnalyzer, TypeScriptAnalyzerResult } from '../../analyzers/src/typescript';
 import { TSLintAnalyzer, TSLintAnalyzerResult } from '../../analyzers/src/tslint';
 
@@ -12,6 +12,13 @@ const getAnalyzerFor = async (
 		analyzers: [TypeScriptAnalyzer, TSLintAnalyzer],
 	}).boot();
 };
+
+beforeAll(async () => {
+	if (!await checkInternetConnection()) {
+		console.debug(`Please only run tests while connected to the internet!`);
+		process.exit(1); // kill child worker
+	}
+});
 
 describe('Validations', () => {
 	describe('TypeScriptValidation', () => {
@@ -34,12 +41,15 @@ describe('Validations', () => {
 			});
 
 			const patches = await validator.validate();
-			expect(patches).toHaveLength(0); // only info will be return to upgrade
+			expect(patches).toHaveLength(1);
 			expect(validator.validation).toHaveLength(1);
 
 			const [upgradeInfo] = validator.validation;
 			expect(upgradeInfo.level).toEqual(ValidationExceptionLevel.info);
-			expect(upgradeInfo.patch).toBeUndefined();
+			expect(upgradeInfo.patches).toBeTruthy();
+			expect(upgradeInfo.patches![0].patch).toEqual('TypeScriptUpdatePatch');
+			expect(upgradeInfo.patches![0].arguments.current).toEqual('3.1.6');
+			expect(upgradeInfo.patches![0].arguments.latest).toEqual(await getLatestVersion('typescript'));
 			expect(upgradeInfo.toString()).toMatchInlineSnapshot(
 				`"Validate TypeScriptValidation: Please update TypeScript to v3.2.4 (installed: v3.1.6) [INFO]"`
 			);
@@ -55,7 +65,7 @@ describe('Validations', () => {
 
 			const patches = await validator.validate();
 			expect(patches).toHaveLength(1);
-			expect(patches).toContain('TypeScriptInstallationPatch');
+			expect(patches[0].patch).toEqual('TypeScriptInstallationPatch');
 			expect(validator.validation[0].toString()).toMatchInlineSnapshot(
 				`"Validate TypeScriptValidation: Using TypeScript without explicit installtion is not allowed [ERROR]"`
 			);
