@@ -17,6 +17,7 @@
     "clean:lock": "rimraf **/package-lock.json",
     "clean:modules": "npx rimraf node_modules",
     "cz": "git-cz",
+    "rebuild:local": "lerna run build && npm run bootstrap",
     "bootstrap": "lerna bootstrap",
     "postinstall": "npm run bootstrap",
     "prettier": "prettier --write \"**/*.*(js|jsx|ts|tsx|json)\" \"!cli/templates/**\"",
