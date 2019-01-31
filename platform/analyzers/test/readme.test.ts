@@ -1,6 +1,6 @@
-import { ProjectAnalyzer, IContext } from '@namics/frontend-defaults-platform-core';
-import { getFixtureContext } from './suite';
-import { ReadmeAnalyzerResult, ReadmeAnalyzer } from '../src/readme';
+import { getFixtureContext } from './utils';
+import { ReadmeAnalyzer, ReadmeAnalyzerResult } from '../src/readme';
+import { IContext, ProjectAnalyzer } from '@namics/frontend-defaults-platform-core';
 
 const FIXTURE = getFixtureContext('readme-project');
 const FIXTURE_NO_README = getFixtureContext('default-project');

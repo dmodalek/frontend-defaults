@@ -1,6 +1,6 @@
-import { ProjectAnalyzer, IContext } from '@namics/frontend-defaults-platform-core';
-import { getFixtureContext } from './suite';
-import { NPMRCAnalyzerResult, NPMRCAnalyzer } from '../src/npmrc';
+import { getFixtureContext } from './utils';
+import { NPMRCAnalyzer, NPMRCAnalyzerResult } from '../src/npmrc';
+import { IContext, ProjectAnalyzer } from '@namics/frontend-defaults-platform-core';
 
 const FIXTURE_WITH_NPMRC = getFixtureContext('npmrc-project');
 const FIXTURE_NO_NPMRC = getFixtureContext('default-project');

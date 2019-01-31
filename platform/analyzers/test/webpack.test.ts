@@ -1,6 +1,6 @@
-import { ProjectAnalyzer, IContext } from '@namics/frontend-defaults-platform-core';
-import { getFixtureContext } from './suite';
+import { getFixtureContext } from './utils';
 import { WebpackAnalyzer, WebpackAnalyzerResult } from '../src/webpack';
+import { IContext, ProjectAnalyzer } from '@namics/frontend-defaults-platform-core';
 
 const FIXTURE = getFixtureContext('webpack-project');
 

@@ -1,6 +1,6 @@
-import { ProjectAnalyzer, IContext } from '@namics/frontend-defaults-platform-core';
-import { getFixtureContext } from './suite';
-import { TSLintAnalyzerResult, TSLintAnalyzer } from '../src/tslint';
+import { getFixtureContext } from './utils';
+import { TSLintAnalyzer, TSLintAnalyzerResult } from '../src/tslint';
+import { IContext, ProjectAnalyzer } from '@namics/frontend-defaults-platform-core';
 
 const FIXTURE = getFixtureContext('tslint-project');
 const FIXTURE_NOT_INSTALLED = getFixtureContext('tslint-project-not-installed');

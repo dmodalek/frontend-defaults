@@ -1,6 +1,6 @@
-import { ProjectAnalyzer, IContext } from '@namics/frontend-defaults-platform-core';
-import { getFixtureContext } from './suite';
-import { EditorconfigAnalyzerResult, EditorconfigAnalyzer } from '../src/editorconfig';
+import { getFixtureContext } from './utils';
+import { EditorconfigAnalyzer, EditorconfigAnalyzerResult } from '../src/editorconfig';
+import { IContext, ProjectAnalyzer } from '@namics/frontend-defaults-platform-core';
 
 const FIXTURE_WITH_EC = getFixtureContext('editorconfig-project');
 const FIXTURE_NO_EC = getFixtureContext('default-project');

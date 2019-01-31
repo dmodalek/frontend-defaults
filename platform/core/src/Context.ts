@@ -1,6 +1,6 @@
 import { IPackage } from "./types/Package";
 import { PackageAnalyzer } from './PackageAnalyzer';
-import { getJSON, displayPath } from './utils/fs';
+import { getJSON, displayPath, fileExists } from './utils/fs';
 import { join } from 'path';
 
 type ContextOptions = {
@@ -12,6 +12,7 @@ type ContextSaveOptions = {
 }
 
 export interface IContext {
+    monorepo: boolean,
     package: IPackage,
     packageAnalyzer: PackageAnalyzer,
     root: string;
@@ -20,6 +21,7 @@ export interface IContext {
 }
 
 export class Context implements IContext {
+    public monorepo: boolean;
     private rawPackage: IPackage;
     private internalPackageAnalyzer: PackageAnalyzer;
     private options: ContextSaveOptions;
@@ -43,9 +45,14 @@ export class Context implements IContext {
                 throw new Error(`No valid project found in context ${displayPath(this.root)}`);
             }
 
+            // generate save package to use for further purposes e.g. getting dependencies
             pkg = this.savePackageAccess(pkg);
             this.rawPackage = pkg;
             this.internalPackageAnalyzer = new PackageAnalyzer(this.rawPackage);
+
+            // we try to guess whether this context is a monorepo or not,
+            // this flag won't be 100% accurate atm, we need to find a better way
+            this.monorepo = await fileExists(join(this.root, 'lerna.json')) || await fileExists(join(this.root, 'nx.json'));
 
             return this;
         } catch (err) {
@@ -53,6 +60,10 @@ export class Context implements IContext {
         }
     }
 
+    /**
+     * Root path to the current context (absolute)
+     * @type {string}
+     */
     public get root(): string {
         return this.options.root;
     }

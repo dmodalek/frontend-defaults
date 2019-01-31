@@ -1,6 +1,6 @@
-import { ProjectAnalyzer, IContext } from '@namics/frontend-defaults-platform-core';
-import { getFixtureContext } from './suite';
-import { LicenseAnalyzerResult, LicenseAnalyzer } from '../src/license';
+import { getFixtureContext } from './utils';
+import { LicenseAnalyzer, LicenseAnalyzerResult } from '../src/license';
+import { IContext, ProjectAnalyzer } from '@namics/frontend-defaults-platform-core';
 
 const FIXTURE_LICENSED = getFixtureContext('license-project');
 const FIXTURE_UNLICENSE = getFixtureContext('default-project');

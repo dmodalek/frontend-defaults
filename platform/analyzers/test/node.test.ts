@@ -1,6 +1,6 @@
-import { ProjectAnalyzer, IContext } from '@namics/frontend-defaults-platform-core';
-import { getFixtureContext } from './suite';
-import { NodeAnalyzerResult, NodeAnalyzer } from '../src/node';
+import { getFixtureContext } from './utils';
+import { NodeAnalyzer, NodeAnalyzerResult } from '../src/node';
+import { IContext, ProjectAnalyzer } from '@namics/frontend-defaults-platform-core';
 
 const FIXTURE_NODE_VERSION = getFixtureContext('node-version-only-project');
 const FIXTURE_NVM_VERSION = getFixtureContext('nvm-only-project');

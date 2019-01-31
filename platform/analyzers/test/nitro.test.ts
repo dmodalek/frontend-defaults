@@ -1,6 +1,6 @@
-import { ProjectAnalyzer, IContext } from '@namics/frontend-defaults-platform-core';
-import { getFixtureContext } from './suite';
+import { getFixtureContext } from './utils';
 import { NitroAnalyzerResult, NitroAnalzyer } from '../src/nitro';
+import { IContext, ProjectAnalyzer } from '@namics/frontend-defaults-platform-core';
 
 const FIXTURE = getFixtureContext('nitro-project');
 const FIXTURE_NO_ENGINE = getFixtureContext('nitro-project-no-view-engine');

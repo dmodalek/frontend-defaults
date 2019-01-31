@@ -1,6 +1,6 @@
-import { ProjectAnalyzer, IContext } from '@namics/frontend-defaults-platform-core';
-import { getFixtureContext } from './suite';
+import { getFixtureContext } from './utils';
 import { TypeScriptAnalyzer, TypeScriptAnalyzerResult } from '../src/typescript';
+import { IContext, ProjectAnalyzer } from '@namics/frontend-defaults-platform-core';
 
 const FIXTURE_INSTALLED = getFixtureContext('ts-project');
 const FIXTURE_NOT_INSTALLED = getFixtureContext('ts-project-not-installed');

@@ -5,6 +5,7 @@ import { IContext } from './Context';
 export interface IPatch<A> {
 	id: string;
 	patch(options?: A): Promise<PatchResult[]>;
+	dry(options?: A): Promise<PatchResult[]>;
 }
 
 type PatchConstructorOptions = {
@@ -69,4 +70,12 @@ export abstract class Patch<A extends any = void> implements IPatch<A> {
 	 * @param {A} options any options for the current patch in object format or void
 	 */
 	abstract async patch(options?: A): Promise<PatchResult[]>;
+
+	/**
+	 * Dry run implementation logic belongs here, you should not use any
+	 * writeFile, shell execution command in here, just return what the
+	 * command will do or will change theoretically.
+	 * @param options 
+	 */
+	abstract async dry(options?: A): Promise<PatchResult[]>;
 }

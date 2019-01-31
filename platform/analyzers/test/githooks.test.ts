@@ -1,6 +1,6 @@
-import { ProjectAnalyzer, IContext } from '@namics/frontend-defaults-platform-core';
-import { getFixtureContext } from './suite';
-import { GitHooksAnalyzerResult, GitHooksAnalyzer } from '../src/githooks';
+import { getFixtureContext } from './utils';
+import { GitHooksAnalyzer, GitHooksAnalyzerResult } from '../src/githooks';
+import { IContext, ProjectAnalyzer } from '@namics/frontend-defaults-platform-core';
 
 const FIXTURE_RC = getFixtureContext('githooks-project');
 const FIXTURE_PKG = getFixtureContext('githooks-package-project');
