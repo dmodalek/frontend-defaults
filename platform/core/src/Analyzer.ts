@@ -1,12 +1,13 @@
 import { IPackage } from './types/Package';
 import { PackageAnalyzer } from './PackageAnalyzer';
+import { IContext } from './Context';
 
 /**
  * Construction options for each analyzer
  * @type {AnalyzerConfiguration<T>}
  */
 export type AnalyzerConfiguration<Analytics extends Object = {}> = {
-	context: string;
+	context: IContext;
 	package: IPackage | null;
 	analytics: Analytics;
 	packageAnalyzer: PackageAnalyzer;
@@ -37,7 +38,7 @@ export abstract class Analyzer<Result> implements IAnalyzer<Result> {
 	 * Project root context as file path
 	 * @type {string}
 	 */
-	protected context: string;
+	protected context: IContext;
 
 	/**
 	 * Project configuration

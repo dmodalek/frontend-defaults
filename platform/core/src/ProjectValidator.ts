@@ -1,15 +1,29 @@
 import { Constructable } from './types/Constructable';
 import { IValidation, ValidationException, RequiredValidationPatch } from './Validation';
 import { ProjectAnalyzer } from './ProjectAnalyzer';
+import { IContext } from './Context';
 
 type ProjectValidatorOptions = {
 	validations?: Constructable<IValidation>[];
 	analyzer: ProjectAnalyzer;
-	context?: string;
+	context: IContext;
 };
 
-export class ProjectValidator<T> {
-	public context: string;
+export interface IProjectValidator {
+	context: IContext;
+	validation: ValidationException[];
+	validate(): Promise<RequiredValidationPatch[]>
+}
+
+/**
+ * Main class to handle validations inside a certain context.
+ * Result can be used to apply certain patches with the `ProjectPatcher`.
+ * @class
+ * @implements {IProjectValidator}
+ * @author Jan Biasi <jan.biasi@namics.com>
+ */
+export class ProjectValidator implements IProjectValidator {
+	public context: IContext;
 	private validations: Constructable<IValidation>[];
 	protected analyzer: ProjectAnalyzer;
 	public validation: ValidationException[] = [];
@@ -22,7 +36,7 @@ export class ProjectValidator<T> {
 	constructor({ context, analyzer, validations = [] }: ProjectValidatorOptions) {
 		this.validations = validations;
 		this.analyzer = analyzer;
-		this.context = context || process.cwd();
+		this.context = context
 	}
 
 	/**

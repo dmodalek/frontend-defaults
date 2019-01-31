@@ -1,23 +1,45 @@
-import { IPatch } from './Patch';
+import { IPatch, PatchResult } from './Patch';
 import { Constructable } from './types/Constructable';
 import { ValidationException } from './Validation';
 import { IProjectAnalyzer } from './ProjectAnalyzer';
+import { IContext, Context } from './Context';
 
-type ProjectPatcherOptions<A> = {
-	patches: Constructable<IPatch>[];
-	analyzer: A;
+type ProjectPatch = {
+	patch: Constructable<IPatch<any>>,
+	arguments: any
+}
+
+type ProjectPatcherOptions = {
+	patches: ProjectPatch[];
+	context: IContext;
 };
 
-export class ProjectPatcher<A> {
-	private patches: Constructable<IPatch>[];
-	private analyzer: IProjectAnalyzer<A>;
+export interface IProjectPatcher {
+	apply(): Promise<any>;
+	applyPatchesFromValidation(validations: ValidationException[]): Promise<any>;
+}
 
-	constructor({ patches, analyzer }: ProjectPatcherOptions<A>) {
+/**
+ * Handles multiple patches for the project in a certain context.
+ * It is also capable of executing patches based on a validation result.
+ * @class
+ * @implements {IProjectPatcher}
+ * @author Jan Biasi <jan.biasi@namics.com>
+ */
+export class ProjectPatcher implements IProjectPatcher {
+	private patches: ProjectPatch[];
+	private context: Context;
+
+	constructor({ patches, context }: ProjectPatcherOptions) {
 		this.patches = patches;
 	}
 
-	async apply(useCertainPatches?: string[]) {
-		// TODO: Overrides via param should be enabled for valiation autorun!
+	public async apply() {
+		// TODO: apply literally all patches (patches can be set in a control infrastructor e.g. CLI)
+	}
+
+	public async applyPatchesFromValidation(validations: ValidationException[]) {
+		// TODO: add logic to extract patches from validation
 	}
 
 	/**
@@ -25,15 +47,25 @@ export class ProjectPatcher<A> {
 	 * @async
 	 * @return Promise<(void | Error)[]>
 	 */
-	async runPatches(): Promise<(void | Error)[]> {
-		return this.patches
-			.map((PatchBlueprint) => {
-				return new PatchBlueprint({
-					analyzer: this.analyzer,
-				});
+	private async runPatches(patches: ProjectPatch[]): Promise<PatchResult[]> {
+		return patches
+			.map((projectPatch: ProjectPatch): { instance: IPatch<any>, arguments: any } => {
+				return {
+					// patch instance
+					instance: new projectPatch.patch({
+						context: this.context
+					}),
+					// arguments for the patch method itself
+					arguments: projectPatch.arguments
+				}
 			})
-			.reduce(async (prev, currentPatcherInst) => {
-				return [...(await prev), await currentPatcherInst.patch()];
+			.reduce(async (prev, currentPatcher) => {
+				return [
+					// previous patch results
+					...await prev,
+					// current patch results
+					...await currentPatcher.instance.patch(currentPatcher.arguments)
+				];
 			}, Promise.resolve([]));
 	}
 }

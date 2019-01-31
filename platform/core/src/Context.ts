@@ -14,12 +14,14 @@ type ContextSaveOptions = {
 export interface IContext {
     package: IPackage,
     packageAnalyzer: PackageAnalyzer,
-    root: string
+    root: string;
+    bind(): Promise<IContext>;
+    getPath(lookup: string): string;
 }
 
-export class Context {
-    public package: IPackage;
-    public packageAnalyzer: PackageAnalyzer;
+export class Context implements IContext {
+    private rawPackage: IPackage;
+    private internalPackageAnalyzer: PackageAnalyzer;
     private options: ContextSaveOptions;
 
     constructor(options: ContextOptions) {
@@ -28,17 +30,22 @@ export class Context {
         this.options = <ContextSaveOptions>options;
     }
 
-    public async bind() {
+    /**
+     * Attach context to the virtual project location. This step
+     * is needed to setup the context correctly!
+     * @returns {ThisType<IContext>}
+     */
+    public async bind(): Promise<IContext> {
         try {
             let pkg = await getJSON<IPackage>(join(this.root, 'package.json'));
-
-            if ((this.package as NodeJS.ErrnoException).code === 'ENOENT') {
+            if ((pkg as any).code === 'ENOENT') {
+                // getJSON can also return an error, maybe we should type this?
                 throw new Error(`No valid project found in context ${displayPath(this.root)}`);
             }
 
             pkg = this.savePackageAccess(pkg);
-            this.package = pkg;
-            this.packageAnalyzer = new PackageAnalyzer(this.package);
+            this.rawPackage = pkg;
+            this.internalPackageAnalyzer = new PackageAnalyzer(this.rawPackage);
 
             return this;
         } catch (err) {
@@ -48,6 +55,23 @@ export class Context {
 
     public get root(): string {
         return this.options.root;
+    }
+
+    public get package(): IPackage {
+        // return package, getter because it is readonly
+        return this.rawPackage;
+    }
+
+    public get packageAnalyzer(): PackageAnalyzer {
+        return this.internalPackageAnalyzer;
+    }
+
+    /**
+     * Resolves a path in the current context
+     * @param lookup a certain path in context
+     */
+    public getPath(lookup: string): string {
+        return join(this.root, lookup);
     }
 
     private savePackageAccess(pkg: IPackage | null): IPackage {

@@ -5,6 +5,7 @@ export * from './utils/fs';
 export * from './utils/version';
 export * from './utils/template';
 
+export * from './Context';
 export * from './ProjectAnalyzer';
 export * from './ProjectValidator';
 export * from './ProjectPatcher';

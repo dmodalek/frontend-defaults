@@ -30,18 +30,23 @@ type MergeJSONResult<Result> = {
 	merged: Result;
 };
 
+/**
+ * Merge two JSON files into the base JSON and returns information about the merge
+ * @param baseSourcePath path to the main JSON file
+ * @param mergableSourcePath path to the JSON file to merge
+ */
 export async function mergeJSON<Result extends Object>(
-	baseSource: string,
-	mergableSource: string
+	baseSourcePath: string,
+	mergableSourcePath: string
 ): Promise<MergeJSONResult<Result>> {
 	try {
-		const baseContents = await getJSON<Partial<Result>>(baseSource);
-		const mergableContents = await getJSON<Partial<Result>>(mergableSource);
+		const baseContents = await getJSON<Partial<Result>>(baseSourcePath);
+		const mergableContents = await getJSON<Partial<Result>>(mergableSourcePath);
 		const rawObjectMerge = Object.assign(<Result>{}, baseContents, mergableContents);
 		const writableMerge = Buffer.from(JSON.stringify(rawObjectMerge));
 
 		return await new Promise<MergeJSONResult<Result>>((resolve, reject) => {
-			writeFile(baseSource, writableMerge, (err) => {
+			writeFile(baseSourcePath, writableMerge, (err) => {
 				err
 					? reject(err)
 					: resolve({

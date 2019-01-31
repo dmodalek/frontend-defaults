@@ -4,14 +4,15 @@ import { IAnalyzer, AnalyzerConfiguration } from './Analyzer';
 import { IPackage } from './types/Package';
 import { Constructable } from './types/Constructable';
 import { PackageAnalyzer } from './PackageAnalyzer';
+import { IContext } from './Context';
 
 type ProjectAnalyzerConstructionOptions = {
-	context?: string;
+	context: IContext;
 	analyzers: Constructable<IAnalyzer<any>>[];
 };
 
 export interface IProjectAnalyzer<Analytics> {
-	context: string;
+	context: IContext;
 	analytics: Analytics;
 	package: IPackage | null;
 	packageAnalyzer: PackageAnalyzer;
@@ -22,9 +23,11 @@ export interface IProjectAnalyzer<Analytics> {
  * Main project analyzer blueprint, used for analyzing projects and handling
  * child analyzers
  * @class
+ * @implements {IProjectAnalyzer<Analytics>}
+ * @author Jan Biasi <jan.biasi@namics.com>
  */
 export class ProjectAnalyzer<Analytics extends Object = {}> implements IProjectAnalyzer<Analytics> {
-	public context: string;
+	public context: IContext;
 	public analytics: Analytics;
 	public package: IPackage | null = null;
 	public packageAnalyzer: PackageAnalyzer = new PackageAnalyzer(null);
@@ -34,11 +37,11 @@ export class ProjectAnalyzer<Analytics extends Object = {}> implements IProjectA
 	/**
 	 * Creates a new project analyzer within a context and certain analyzers.
 	 * Context is optional, default value will your working directory `process.cwd()`.
-	 * @param { context?: string, analyzers: IAnalyzer<any>[] }
+	 * @param { context: IContext, analyzers: IAnalyzer<any>[] }
 	 */
 	constructor({ context, analyzers }: ProjectAnalyzerConstructionOptions) {
 		this.analyzers = analyzers;
-		this.context = context || process.cwd();
+		this.context = context;
 	}
 
 	/**
@@ -48,13 +51,6 @@ export class ProjectAnalyzer<Analytics extends Object = {}> implements IProjectA
 	 */
 	async boot() {
 		try {
-			let pkg = await getJSON<IPackage>(join(this.context, 'package.json'));
-			if ((this.package as NodeJS.ErrnoException).code === 'ENOENT') {
-				throw new Error(`No valid project found in context ${displayPath(this.context)}`);
-			}
-			pkg = this.setSavePackageAccessForAnalyzers(pkg);
-			this.package = pkg;
-
 			this.packageAnalyzer = new PackageAnalyzer(this.package);
 			this.analytics = await this.runAnalyzers();
 			this.initialAnalyzationDone = true;
@@ -62,7 +58,8 @@ export class ProjectAnalyzer<Analytics extends Object = {}> implements IProjectA
 			// make chainable for analytics information
 			return this;
 		} catch (err) {
-			throw new Error(`Can't start analytics due missing package.json in ${displayPath(this.context)}`);
+			// how should we handle child errors here?
+			throw err;
 		}
 	}
 
@@ -82,23 +79,6 @@ export class ProjectAnalyzer<Analytics extends Object = {}> implements IProjectA
 					...(await currentAnalyzerInst.analyze()),
 				};
 			}, Promise.resolve({}));
-	}
-
-	/**
-	 * Make sure that the package.json analytics contains each object needed
-	 * to prevent undefined accessor failures
-	 * @return void
-	 */
-	private setSavePackageAccessForAnalyzers(pkg: IPackage | null): IPackage {
-		if (!pkg) {
-			pkg = {};
-		}
-
-		pkg.dependencies = pkg.dependencies || {};
-		pkg.devDependencies = pkg.devDependencies || {};
-		pkg.peerDependencies = pkg.peerDependencies || {};
-		pkg.engines = pkg.engines || {};
-		return pkg;
 	}
 
 	/**

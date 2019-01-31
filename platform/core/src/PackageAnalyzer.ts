@@ -3,9 +3,10 @@ import { IPackage } from './types/Package';
 /**
  * Package analyzation utility
  * @class
+ * @author Jan Biasi <jan.biasi@namics.com>
  */
 export class PackageAnalyzer {
-	constructor(private pkg: IPackage | null) {}
+	constructor(private pkg: IPackage | null) { }
 
 	/**
 	 * Get all dependencies safely
