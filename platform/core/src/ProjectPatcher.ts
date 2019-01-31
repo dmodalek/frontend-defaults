@@ -1,8 +1,8 @@
-import { IPatch, PatchResult } from './Patch';
+import { Context, IContext } from './Context';
+import { ConstructablePatch, IPatch, PatchResult } from './Patch';
+import { IProjectAnalyzer } from './ProjectAnalyzer';
 import { Constructable } from './types/Constructable';
 import { ValidationException } from './Validation';
-import { IProjectAnalyzer } from './ProjectAnalyzer';
-import { IContext, Context } from './Context';
 
 type ProjectPatch = {
 	patch: Constructable<IPatch<any>>,
@@ -64,8 +64,14 @@ export class ProjectPatcher implements IProjectPatcher {
 					// previous patch results
 					...await prev,
 					// current patch results
-					...await currentPatcher.instance.patch(currentPatcher.arguments)
+					...await currentPatcher.instance.validate().patch(currentPatcher.arguments)
 				];
 			}, Promise.resolve([]));
 	}
 }
+
+export function buildSinglePatch<GenericPatch extends ConstructablePatch<Options>, Options>(context: IContext, PatchBlueprint: GenericPatch) {
+	return new PatchBlueprint({
+		context
+	});
+};

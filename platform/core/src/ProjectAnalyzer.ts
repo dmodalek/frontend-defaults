@@ -1,10 +1,10 @@
-import { join } from 'path';
-import { getJSON, displayPath } from './utils/fs';
-import { IAnalyzer, AnalyzerConfiguration } from './Analyzer';
-import { IPackage } from './types/Package';
-import { Constructable } from './types/Constructable';
-import { PackageAnalyzer } from './PackageAnalyzer';
+import { AnalyzerConfiguration, IAnalyzer } from './Analyzer';
 import { IContext } from './Context';
+import { PackageAnalyzer } from './PackageAnalyzer';
+import { Constructable } from './types/Constructable';
+import { IPackage } from './types/Package';
+import { displayPath, getJSON } from './utils/fs';
+import { join } from 'path';
 
 type ProjectAnalyzerConstructionOptions = {
 	context: IContext;
@@ -14,8 +14,6 @@ type ProjectAnalyzerConstructionOptions = {
 export interface IProjectAnalyzer<Analytics> {
 	context: IContext;
 	analytics: Analytics;
-	package: IPackage | null;
-	packageAnalyzer: PackageAnalyzer;
 	initialAnalyzationDone: boolean
 }
 
@@ -29,8 +27,6 @@ export interface IProjectAnalyzer<Analytics> {
 export class ProjectAnalyzer<Analytics extends Object = {}> implements IProjectAnalyzer<Analytics> {
 	public context: IContext;
 	public analytics: Analytics;
-	public package: IPackage | null = null;
-	public packageAnalyzer: PackageAnalyzer = new PackageAnalyzer(null);
 	public initialAnalyzationDone = false;
 	private analyzers: Constructable<IAnalyzer<any>>[];
 
@@ -51,7 +47,6 @@ export class ProjectAnalyzer<Analytics extends Object = {}> implements IProjectA
 	 */
 	async boot() {
 		try {
-			this.packageAnalyzer = new PackageAnalyzer(this.package);
 			this.analytics = await this.runAnalyzers();
 			this.initialAnalyzationDone = true;
 
@@ -88,9 +83,7 @@ export class ProjectAnalyzer<Analytics extends Object = {}> implements IProjectA
 	private get analyzerBaseConfiguration(): AnalyzerConfiguration {
 		return {
 			context: this.context,
-			package: this.package,
-			analytics: this.analytics,
-			packageAnalyzer: this.packageAnalyzer,
+			analytics: this.analytics
 		};
 	}
 }

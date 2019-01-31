@@ -1,6 +1,6 @@
-import { IPackage } from './types/Package';
-import { PackageAnalyzer } from './PackageAnalyzer';
 import { IContext } from './Context';
+import { PackageAnalyzer } from './PackageAnalyzer';
+import { IPackage } from './types/Package';
 
 /**
  * Construction options for each analyzer
@@ -8,9 +8,7 @@ import { IContext } from './Context';
  */
 export type AnalyzerConfiguration<Analytics extends Object = {}> = {
 	context: IContext;
-	package: IPackage | null;
 	analytics: Analytics;
-	packageAnalyzer: PackageAnalyzer;
 };
 
 /**
@@ -60,9 +58,7 @@ export abstract class Analyzer<Result> implements IAnalyzer<Result> {
 
 	constructor(configuration: AnalyzerConfiguration) {
 		this.context = configuration.context;
-		this.package = configuration.package;
 		this.anayltics = configuration.analytics;
-		this.packageAnalyzer = configuration.packageAnalyzer;
 	}
 
 	/**

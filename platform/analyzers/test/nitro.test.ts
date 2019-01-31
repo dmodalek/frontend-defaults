@@ -19,8 +19,9 @@ describe('Analyzers', () => {
 			expect(async () => await getFixtureAnalyzer(await FIXTURE)).not.toThrow();
 		});
 
-		it('should analyze a project with installation and configs correctly', async () => {
+		it.only('should analyze a project with installation and configs correctly', async () => {
 			const analyzer = await getFixtureAnalyzer(await FIXTURE);
+			console.log(analyzer);
 
 			expect(analyzer.analytics.nitro).toEqual(true);
 			expect(analyzer.analytics.nitroViewEngine).toEqual('hbs');

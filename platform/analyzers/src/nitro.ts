@@ -6,15 +6,17 @@ export type NitroAnalyzerResult = {
 	nitroViewEngine?: string;
 };
 
+type NitroConfigType = {
+	'generator-nitro'?: {
+		templateEngine: string;
+	};
+}
+
 export class NitroAnalzyer extends Analyzer<NitroAnalyzerResult> {
 	async analyze(): Promise<NitroAnalyzerResult> {
 		const yeomanPath = this.context.getPath('.yo-rc.json');
 		const doesYeomanExist = await fileExists(yeomanPath);
-		const yeomanConfig = await getJSON<{
-			'generator-nitro'?: {
-				templateEngine: string;
-			};
-		}>(yeomanPath);
+		const yeomanConfig = await getJSON<NitroConfigType>(yeomanPath);
 
 		if (doesYeomanExist) {
 			const nitroInstallation = this.packageAnalyzer.anyDependencyExists('generator-nitro');

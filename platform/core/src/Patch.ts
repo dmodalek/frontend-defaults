@@ -1,11 +1,16 @@
+import { IContext } from './Context';
 import { IProjectAnalyzer } from './ProjectAnalyzer';
 import { ProjectValidator } from './ProjectValidator';
-import { IContext } from './Context';
 
 export interface IPatch<A> {
 	id: string;
 	patch(options?: A): Promise<PatchResult[]>;
 	dry(options?: A): Promise<PatchResult[]>;
+	validate(): IPatch<A>;
+}
+
+export type ConstructablePatch<A> = {
+	new({ context }: PatchConstructorOptions): IPatch<A>;
 }
 
 type PatchConstructorOptions = {
@@ -59,10 +64,19 @@ export abstract class Patch<A extends any = void> implements IPatch<A> {
 	 */
 	constructor({ context }: PatchConstructorOptions) {
 		this.context = context;
+	}
 
+	/**
+	 * Validation method to check if the extended patch is valid
+	 * and all needed information are provided.
+	 * @returns {IPatch<A>} this
+	 */
+	validate(): IPatch<A> {
 		if (this.id === '__ABSTRACT__') {
 			throw new Error(`Invalid patch ${this.constructor.name}: no id property set`);
 		}
+
+		return this;
 	}
 
 	/**

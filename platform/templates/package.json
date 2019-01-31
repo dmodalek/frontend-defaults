@@ -14,19 +14,6 @@
     "engines": {
         "node": ">=8"
     },
-    "files": [
-        "README.md",
-        "LICENSE",
-        "dist"
-    ],
-    "scripts": {
-        "test": "jest",
-        "test:watch": "jest --watch --notify --notifyMode=failure-change",
-        "watch": "tsc -p tsconfig.build.json -w",
-        "prebuild": "rimraf dist",
-        "build": "tsc -p tsconfig.build.json",
-        "prepublishOnly": "npm-run-all test build"
-    },
     "devDependencies": {
         "@namics/frontend-defaults-platform-test-fixtures": "1.0.0",
         "@namics/ts-config": "*",
