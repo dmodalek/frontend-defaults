@@ -1,0 +1,16 @@
+{
+	"husky": {
+		"hooks": {
+			"pre-commit": "lint-staged"
+		}
+	},
+	"lint-staged": {
+		"linters":{
+			"src/**/*.{js,jsx}": ["eslint"]
+		}
+	},
+	"devDependencies": {
+		"husky": "1.0.1",
+		"lint-staged": "7.3.0"
+	}
+}
