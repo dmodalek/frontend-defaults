@@ -1,4 +1,3 @@
-import { join } from 'path';
 import { Analyzer, fileExists } from '@namics/frontend-defaults-platform-core';
 
 export type TSLintAnalyzerResult = {
@@ -8,7 +7,7 @@ export type TSLintAnalyzerResult = {
 
 export class TSLintAnalyzer extends Analyzer<TSLintAnalyzerResult> {
 	async analyze(): Promise<TSLintAnalyzerResult> {
-		const doesTSLintExist = await fileExists(join(this.context, 'tslint.json'));
+		const doesTSLintExist = await fileExists(this.context.getPath('tslint.json'));
 
 		if (doesTSLintExist) {
 			const eslintInstallation = this.packageAnalyzer.anyDependencyExists('tslint');

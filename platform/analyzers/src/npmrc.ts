@@ -8,7 +8,7 @@ export type NPMRCAnalyzerResult = {
 
 export class NPMRCAnalyzer extends Analyzer<NPMRCAnalyzerResult> {
 	async analyze(): Promise<NPMRCAnalyzerResult> {
-		const npmrcPath = join(this.context, '.npmrc');
+		const npmrcPath = this.context.getPath('.npmrc');
 		const npmrcExists = await fileExists(npmrcPath);
 
 		if (npmrcExists) {

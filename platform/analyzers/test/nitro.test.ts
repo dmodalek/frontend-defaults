@@ -1,12 +1,12 @@
-import { ProjectAnalyzer } from '@namics/frontend-defaults-platform-core';
-import { getFixturePath } from './suite';
+import { ProjectAnalyzer, IContext } from '@namics/frontend-defaults-platform-core';
+import { getFixtureContext } from './suite';
 import { NitroAnalyzerResult, NitroAnalzyer } from '../src/nitro';
 
-const FIXTURE = getFixturePath('nitro-project');
-const FIXTURE_NO_ENGINE = getFixturePath('nitro-project-no-view-engine');
-const FIXTURE_NOT_INSTALLED = getFixturePath('nitro-project-not-installed');
+const FIXTURE = getFixtureContext('nitro-project');
+const FIXTURE_NO_ENGINE = getFixtureContext('nitro-project-no-view-engine');
+const FIXTURE_NOT_INSTALLED = getFixtureContext('nitro-project-not-installed');
 
-const getFixtureAnalyzer = async (context: string): Promise<ProjectAnalyzer<NitroAnalyzerResult>> => {
+const getFixtureAnalyzer = async (context: IContext): Promise<ProjectAnalyzer<NitroAnalyzerResult>> => {
 	return new ProjectAnalyzer<NitroAnalyzerResult>({
 		context,
 		analyzers: [NitroAnalzyer],
@@ -16,11 +16,11 @@ const getFixtureAnalyzer = async (context: string): Promise<ProjectAnalyzer<Nitr
 describe('Analyzers', () => {
 	describe('NitroAnalyzer', () => {
 		it('should not crash the ProjectAnalyzer', async () => {
-			expect(async () => await getFixtureAnalyzer(FIXTURE)).not.toThrow();
+			expect(async () => await getFixtureAnalyzer(await FIXTURE)).not.toThrow();
 		});
 
 		it('should analyze a project with installation and configs correctly', async () => {
-			const analyzer = await getFixtureAnalyzer(FIXTURE);
+			const analyzer = await getFixtureAnalyzer(await FIXTURE);
 
 			expect(analyzer.analytics.nitro).toEqual(true);
 			expect(analyzer.analytics.nitroViewEngine).toEqual('hbs');
@@ -29,7 +29,7 @@ describe('Analyzers', () => {
 		});
 
 		it('should analyze a project without nitro installation correctly', async () => {
-			const analyzer = await getFixtureAnalyzer(FIXTURE_NOT_INSTALLED);
+			const analyzer = await getFixtureAnalyzer(await FIXTURE_NOT_INSTALLED);
 
 			expect(analyzer.analytics.nitro).toEqual(true);
 			expect(analyzer.analytics.nitroViewEngine).toEqual('hbs');
@@ -38,7 +38,7 @@ describe('Analyzers', () => {
 		});
 
 		it('should analyze a project without nitro template setting correctly', async () => {
-			const analyzer = await getFixtureAnalyzer(FIXTURE_NO_ENGINE);
+			const analyzer = await getFixtureAnalyzer(await FIXTURE_NO_ENGINE);
 
 			expect(analyzer.analytics.nitro).toEqual(true);
 			expect(analyzer.analytics.nitroViewEngine).toEqual('default');

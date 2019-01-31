@@ -1,4 +1,3 @@
-import { join } from 'path';
 import { Analyzer, fileExists } from '@namics/frontend-defaults-platform-core';
 
 export type ESLintAnalyzerResult = {
@@ -9,10 +8,10 @@ export type ESLintAnalyzerResult = {
 
 export class ESLintAnalyzer extends Analyzer<ESLintAnalyzerResult> {
 	async analyze(): Promise<ESLintAnalyzerResult> {
-		const doesESLintExist = await fileExists(join(this.context, '.eslintrc.js'));
+		const doesESLintExist = await fileExists(this.context.getPath('.eslintrc.js'));
 
 		if (doesESLintExist) {
-			const doesESLintIgnoreExist = await fileExists(join(this.context, '.eslintignore'));
+			const doesESLintIgnoreExist = await fileExists(this.context.getPath('.eslintignore'));
 			const eslintInstallation = this.packageAnalyzer.anyDependencyExists('eslint');
 
 			return {

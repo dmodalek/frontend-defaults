@@ -1,11 +1,11 @@
-import { ProjectAnalyzer } from '@namics/frontend-defaults-platform-core';
-import { getFixturePath } from './suite';
+import { ProjectAnalyzer, IContext } from '@namics/frontend-defaults-platform-core';
+import { getFixtureContext } from './suite';
 import { NPMRCAnalyzerResult, NPMRCAnalyzer } from '../src/npmrc';
 
-const FIXTURE_WITH_NPMRC = getFixturePath('npmrc-project');
-const FIXTURE_NO_NPMRC = getFixturePath('default-project');
+const FIXTURE_WITH_NPMRC = getFixtureContext('npmrc-project');
+const FIXTURE_NO_NPMRC = getFixtureContext('default-project');
 
-const getFixtureAnalyzer = async (context: string): Promise<ProjectAnalyzer<NPMRCAnalyzerResult>> => {
+const getFixtureAnalyzer = async (context: IContext): Promise<ProjectAnalyzer<NPMRCAnalyzerResult>> => {
 	return new ProjectAnalyzer<NPMRCAnalyzerResult>({
 		context,
 		analyzers: [NPMRCAnalyzer],
@@ -15,12 +15,12 @@ const getFixtureAnalyzer = async (context: string): Promise<ProjectAnalyzer<NPMR
 describe('Analyzers', () => {
 	describe('NPMRCAnalyzer', () => {
 		it('should not crash the ProjectAnalyzer', async () => {
-			expect(async () => await getFixtureAnalyzer(FIXTURE_WITH_NPMRC)).not.toThrow();
-			expect(async () => await getFixtureAnalyzer(FIXTURE_NO_NPMRC)).not.toThrow();
+			expect(async () => await getFixtureAnalyzer(await FIXTURE_WITH_NPMRC)).not.toThrow();
+			expect(async () => await getFixtureAnalyzer(await FIXTURE_NO_NPMRC)).not.toThrow();
 		});
 
 		it('should analyze a project with npmrc and save-exact correctly', async () => {
-			const analyzer = await getFixtureAnalyzer(FIXTURE_WITH_NPMRC);
+			const analyzer = await getFixtureAnalyzer(await FIXTURE_WITH_NPMRC);
 
 			expect(analyzer.analytics.npmrc).toEqual(true);
 			expect(analyzer.analytics.npmrcSaveExactEnabled).toEqual(true);
@@ -28,7 +28,7 @@ describe('Analyzers', () => {
 		});
 
 		it('should analyze a project without npmrc correctly', async () => {
-			const analyzer = await getFixtureAnalyzer(FIXTURE_NO_NPMRC);
+			const analyzer = await getFixtureAnalyzer(await FIXTURE_NO_NPMRC);
 
 			expect(analyzer.analytics.npmrc).toEqual(false);
 			expect(analyzer.analytics.npmrcSaveExactEnabled).toEqual(undefined);

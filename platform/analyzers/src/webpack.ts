@@ -9,7 +9,7 @@ export type WebpackAnalyzerResult = {
 
 export class WebpackAnalyzer extends Analyzer<WebpackAnalyzerResult> {
 	async analyze(): Promise<WebpackAnalyzerResult> {
-		const possibleWebpackConfigs = await findFilesByPattern(this.context, 'webpack.*.{js,ts}');
+		const possibleWebpackConfigs = await findFilesByPattern(this.context.root, 'webpack.*.{js,ts}');
 
 		if (possibleWebpackConfigs.length > 0) {
 			const webpackInstalled = this.packageAnalyzer.anyDependencyExists('webpack');

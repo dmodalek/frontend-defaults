@@ -1,11 +1,11 @@
-import { ProjectAnalyzer } from '@namics/frontend-defaults-platform-core';
-import { getFixturePath } from './suite';
+import { ProjectAnalyzer, IContext } from '@namics/frontend-defaults-platform-core';
+import { getFixtureContext } from './suite';
 import { ESLintAnalyzer, ESLintAnalyzerResult } from '../src/eslint';
 
-const FIXTURE_INSTALLED = getFixturePath('eslint-project');
-const FIXTURE_NOT_INSTALLED = getFixturePath('eslint-project-not-installed');
+const FIXTURE_INSTALLED = getFixtureContext('eslint-project');
+const FIXTURE_NOT_INSTALLED = getFixtureContext('eslint-project-not-installed');
 
-const getFixtureAnalyzer = async (context: string): Promise<ProjectAnalyzer<ESLintAnalyzerResult>> => {
+const getFixtureAnalyzer = async (context: IContext): Promise<ProjectAnalyzer<ESLintAnalyzerResult>> => {
 	return new ProjectAnalyzer<ESLintAnalyzerResult>({
 		context,
 		analyzers: [ESLintAnalyzer],
@@ -15,11 +15,11 @@ const getFixtureAnalyzer = async (context: string): Promise<ProjectAnalyzer<ESLi
 describe('Analyzers', () => {
 	describe('ESLintAnalyzer', () => {
 		it('should not crash the ProjectAnalyzer', async () => {
-			expect(async () => await getFixtureAnalyzer(FIXTURE_INSTALLED)).not.toThrow();
+			expect(async () => await getFixtureAnalyzer(await FIXTURE_INSTALLED)).not.toThrow();
 		});
 
 		it('should analyze a project with installation correctly', async () => {
-			const analyzer = await getFixtureAnalyzer(FIXTURE_INSTALLED);
+			const analyzer = await getFixtureAnalyzer(await FIXTURE_INSTALLED);
 
 			expect(analyzer.analytics.eslint).toEqual(true);
 			expect(analyzer.analytics.eslintIgnore).toEqual(true);
@@ -28,7 +28,7 @@ describe('Analyzers', () => {
 		});
 
 		it('should analyze a project without ignore & installation correctly', async () => {
-			const analyzer = await getFixtureAnalyzer(FIXTURE_NOT_INSTALLED);
+			const analyzer = await getFixtureAnalyzer(await FIXTURE_NOT_INSTALLED);
 
 			expect(analyzer.analytics.eslint).toEqual(true);
 			expect(analyzer.analytics.eslintIgnore).toEqual(false);

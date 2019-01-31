@@ -1,4 +1,3 @@
-import { join } from 'path';
 import { Analyzer, fileExists, getJSON } from '@namics/frontend-defaults-platform-core';
 
 export type NitroAnalyzerResult = {
@@ -9,7 +8,7 @@ export type NitroAnalyzerResult = {
 
 export class NitroAnalzyer extends Analyzer<NitroAnalyzerResult> {
 	async analyze(): Promise<NitroAnalyzerResult> {
-		const yeomanPath = join(this.context, '.yo-rc.json');
+		const yeomanPath = this.context.getPath('.yo-rc.json');
 		const doesYeomanExist = await fileExists(yeomanPath);
 		const yeomanConfig = await getJSON<{
 			'generator-nitro'?: {

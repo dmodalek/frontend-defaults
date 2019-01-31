@@ -1,5 +1,4 @@
 import { Analyzer, fileExists, getFileContents } from '@namics/frontend-defaults-platform-core';
-import { join } from 'path';
 
 export enum NodeAnalyzerManagerType {
 	'nvm' = 'nvm',
@@ -65,10 +64,10 @@ export class NodeAnalyzer extends Analyzer<NodeAnalyzerResult> {
 	}
 
 	private get nodeVersionPath() {
-		return join(this.context, '.node-version');
+		return this.context.getPath('.node-version');
 	}
 
 	private get nvmrcPath() {
-		return join(this.context, '.nvmrc');
+		return this.context.getPath('.nvmrc');
 	}
 }

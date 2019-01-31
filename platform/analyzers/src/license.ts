@@ -7,7 +7,8 @@ export type LicenseAnalyzerResult = {
 
 export class LicenseAnalyzer extends Analyzer<LicenseAnalyzerResult> {
 	async analyze(): Promise<LicenseAnalyzerResult> {
-		const licenseExists = await fileExists(join(this.context, 'LICENSE'));
+		// TODO: Recognize also license or License (case)
+		const licenseExists = await fileExists(this.context.getPath('LICENSE'));
 
 		return {
 			license: licenseExists,

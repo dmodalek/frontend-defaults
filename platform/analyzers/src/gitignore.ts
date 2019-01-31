@@ -1,4 +1,3 @@
-import { join } from 'path';
 import { Analyzer, fileExists } from '@namics/frontend-defaults-platform-core';
 
 export type GitIgnoreAnalyzerResult = {
@@ -7,7 +6,7 @@ export type GitIgnoreAnalyzerResult = {
 
 export class GitIgnoreAnalzyer extends Analyzer<GitIgnoreAnalyzerResult> {
 	async analyze(): Promise<GitIgnoreAnalyzerResult> {
-		const doesGitignoreExist = await fileExists(join(this.context, '.gitignore'));
+		const doesGitignoreExist = await fileExists(this.context.getPath('.gitignore'));
 
 		return {
 			gitignore: doesGitignoreExist,

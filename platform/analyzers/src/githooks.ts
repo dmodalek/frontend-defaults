@@ -1,4 +1,3 @@
-import { join } from 'path';
 import { Analyzer, fileExists } from '@namics/frontend-defaults-platform-core';
 
 export type GitHooksLocation = 'rc' | 'package';
@@ -11,7 +10,7 @@ export type GitHooksAnalyzerResult = {
 
 export class GitHooksAnalyzer extends Analyzer<GitHooksAnalyzerResult> {
 	async analyze(): Promise<GitHooksAnalyzerResult> {
-		const doesGitHooksConfigExist = await fileExists(join(this.context, '.huskyrc'));
+		const doesGitHooksConfigExist = await fileExists(this.context.getPath('.huskyrc'));
 		const isHuskyInstalled = this.packageAnalyzer.anyDependencyExists('husky');
 		const doesGitHooksConfigExistInPkg = !!(this.package as any).husky;
 

@@ -1,11 +1,11 @@
-import { ProjectAnalyzer } from '@namics/frontend-defaults-platform-core';
-import { getFixturePath } from './suite';
+import { ProjectAnalyzer, IContext } from '@namics/frontend-defaults-platform-core';
+import { getFixtureContext } from './suite';
 import { TypeScriptAnalyzer, TypeScriptAnalyzerResult } from '../src/typescript';
 
-const FIXTURE_INSTALLED = getFixturePath('ts-project');
-const FIXTURE_NOT_INSTALLED = getFixturePath('ts-project-not-installed');
+const FIXTURE_INSTALLED = getFixtureContext('ts-project');
+const FIXTURE_NOT_INSTALLED = getFixtureContext('ts-project-not-installed');
 
-const getFixtureAnalyzer = async (context: string): Promise<ProjectAnalyzer<TypeScriptAnalyzerResult>> => {
+const getFixtureAnalyzer = async (context: IContext): Promise<ProjectAnalyzer<TypeScriptAnalyzerResult>> => {
 	return new ProjectAnalyzer<TypeScriptAnalyzerResult>({
 		context,
 		analyzers: [TypeScriptAnalyzer],
@@ -15,11 +15,11 @@ const getFixtureAnalyzer = async (context: string): Promise<ProjectAnalyzer<Type
 describe('Analyzers', () => {
 	describe('TypeScriptAnalyzer', () => {
 		it('should not crash the ProjectAnalyzer', async () => {
-			expect(async () => await getFixtureAnalyzer(FIXTURE_INSTALLED)).not.toThrow();
+			expect(async () => await getFixtureAnalyzer(await FIXTURE_INSTALLED)).not.toThrow();
 		});
 
 		it('should analyze a project with installation correctly', async () => {
-			const analyzer = await getFixtureAnalyzer(FIXTURE_INSTALLED);
+			const analyzer = await getFixtureAnalyzer(await FIXTURE_INSTALLED);
 
 			expect(analyzer.analytics.typescript).toEqual(true);
 			expect(analyzer.analytics.typescriptInstallation).toEqual('3.2.4');
@@ -27,7 +27,7 @@ describe('Analyzers', () => {
 		});
 
 		it('should analyze a project without installation correctly', async () => {
-			const analyzer = await getFixtureAnalyzer(FIXTURE_NOT_INSTALLED);
+			const analyzer = await getFixtureAnalyzer(await FIXTURE_NOT_INSTALLED);
 
 			expect(analyzer.analytics.typescript).toEqual(true);
 			expect(analyzer.analytics.typescriptInstallation).toEqual(false);

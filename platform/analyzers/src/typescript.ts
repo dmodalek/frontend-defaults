@@ -8,7 +8,7 @@ export type TypeScriptAnalyzerResult = {
 
 export class TypeScriptAnalyzer extends Analyzer<TypeScriptAnalyzerResult> {
 	async analyze(): Promise<TypeScriptAnalyzerResult> {
-		const doesTypeScriptExist = await fileExists(join(this.context, 'tsconfig.json'));
+		const doesTypeScriptExist = await fileExists(this.context.getPath('tsconfig.json'));
 
 		if (doesTypeScriptExist) {
 			const tsInstallation = this.packageAnalyzer.anyDependencyExists('typescript');
