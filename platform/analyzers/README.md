@@ -5,29 +5,18 @@ Location for pluggable core analyzers which will do an async validation job agai
 
 ```ts
 import { ProjectAnalyzer } from '@namics/frontend-defaults-platform-core';
-import {
-    EditorconfigAnalyzer, EditorConfigAnalyzerResult,
-    WebpackAnalyzer, WebpackAnalyzerResult,
-    LicenseAnalyzer, LicenseAnalyzerResult
-} from '@namics/frontend-defaults-analyzers';
-
-type AnalyzerResult = 
-    EditorConfigAnalyzerResult &
-    WebpackAnalyzerResult &
-    LicenseAnalyzerResult;
+import { editorConfigAnalyzer, webpackAnalyzer, licenseAnalyzer } from '@namics/frontend-defaults-analyzers';
 
 (async () => {
-    const analyzer = await new ProjectAnalyzer<AnalyzerResult>({
-        context: '/path/to/project',
-        analyzers: [
-            EditorconfigAnalyzer,
-            WebpackAnalyzer,
-            LicenseAnalyzer
-        ]
-    }).boot();
+    const results = analyze(
+        '/path/to/project', 
+        editorConfigAnalyzer,
+        webpackAnalyzer,
+        licenseAnalyzer
+    );
 
-    analyzer.analytics.editorconfig; // true
-    analyzer.analytics.webpackConfigs; // ['webpack.config.dev.js', ...]
+    results.editorconfig; // true
+    results.webpackConfigs; // ['webpack.config.dev.js', ...]
 })();
 ```
 

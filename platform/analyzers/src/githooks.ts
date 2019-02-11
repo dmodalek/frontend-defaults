@@ -19,7 +19,7 @@ type PackageWithHuskyConfig = IPackage & {
 	husky: any
 }
 
-export const githooksAnalyzer = async (cwd: string): Promise<GitHooksAnalyzerResult> => {
+export const gitHooksAnalyzer = async (cwd: string): Promise<GitHooksAnalyzerResult> => {
 	const doesGitHooksConfigExist = await fileExists(join(cwd, '.huskyrc'));
 	const gitHooksInstallation = await getDependencyInstallation(cwd, 'husky');
 	const pkg: PackageWithHuskyConfig = await getPackageJSON(cwd) as any;

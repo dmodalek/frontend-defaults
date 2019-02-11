@@ -1,5 +1,5 @@
 import { getFixtureContext } from './utils';
-import { githooksAnalyzer } from '../src/githooks';
+import { gitHooksAnalyzer } from '../src/githooks';
 
 const FIXTURE_RC = getFixtureContext('githooks-project');
 const FIXTURE_PKG = getFixtureContext('githooks-package-project');
@@ -7,12 +7,12 @@ const FIXTURE_PKG = getFixtureContext('githooks-package-project');
 describe('Analyzers', () => {
 	describe('GitHooksAnalyzer', () => {
 		it('should not crash', async () => {
-			expect(async () => await githooksAnalyzer(FIXTURE_RC)).not.toThrow();
-			expect(async () => await githooksAnalyzer(FIXTURE_PKG)).not.toThrow();
+			expect(async () => await gitHooksAnalyzer(FIXTURE_RC)).not.toThrow();
+			expect(async () => await gitHooksAnalyzer(FIXTURE_PKG)).not.toThrow();
 		});
 
 		it('should analyze a project with .huskyrc correctly', async () => {
-			const analytics = await githooksAnalyzer(FIXTURE_RC);
+			const analytics = await gitHooksAnalyzer(FIXTURE_RC);
 
 			expect(analytics.gitHooks).toEqual(true);
 			expect(analytics.gitHooksLocation).toEqual('rc');
@@ -23,7 +23,7 @@ describe('Analyzers', () => {
 		});
 
 		it('should analyze a project with husky in package correctly', async () => {
-			const analytics = await githooksAnalyzer(FIXTURE_PKG);
+			const analytics = await gitHooksAnalyzer(FIXTURE_PKG);
 
 			expect(analytics.gitHooks).toEqual(false);
 			expect(analytics.gitHooksLocation).toEqual('package');

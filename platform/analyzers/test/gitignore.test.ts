@@ -1,6 +1,5 @@
 import { getFixtureContext } from './utils';
 import { gitIgnoreAnalyzer } from '../src/gitignore';
-import { IContext, ProjectAnalyzer } from '@namics/frontend-defaults-platform-core';
 
 const FIXTURE_INSTALLED = getFixtureContext('gitignore-project');
 const FIXTURE_NOT_INSTALLED = getFixtureContext('default-project'); // has no .gitignore
