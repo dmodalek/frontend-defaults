@@ -1,32 +1,36 @@
-import { Analyzer, findFilesByPattern } from '@namics/frontend-defaults-platform-core';
+import {
+	DependencyInstallation,
+	findFilesByPattern,
+	getDependencyInstallation,
+	getPackageJSON
+	} from '@namics/frontend-defaults-platform-core';
 
 export type WebpackAnalyzerResult = {
 	webpack: boolean;
-	webpackInstallation?: string | false;
+	webpackInstallation?: DependencyInstallation;
 	webpackConfigurations?: string[];
 	webpackInstalledDependencies?: string[];
 };
 
-export class WebpackAnalyzer extends Analyzer<WebpackAnalyzerResult> {
-	async analyze(): Promise<WebpackAnalyzerResult> {
-		const possibleWebpackConfigs = await findFilesByPattern(this.context.root, 'webpack.*.{js,ts}');
+export const webpackAnalyzer = async (cwd: string): Promise<WebpackAnalyzerResult> => {
+	const possibleWebpackConfigs = await findFilesByPattern(cwd, 'webpack.*.{js,ts}');
 
-		if (possibleWebpackConfigs.length > 0) {
-			const webpackInstalled = this.packageAnalyzer.anyDependencyExists('webpack');
-			const possibleWebpackDependencies = Object.keys(this.packageAnalyzer.devDependencies).filter(
-				(name) => !!~name.indexOf('webpack')
-			);
-
-			return {
-				webpack: true,
-				webpackInstallation: webpackInstalled ? webpackInstalled.version : false,
-				webpackConfigurations: possibleWebpackConfigs,
-				webpackInstalledDependencies: possibleWebpackDependencies,
-			};
-		}
+	if (possibleWebpackConfigs.length > 0) {
+		const pkg = await getPackageJSON(cwd);
+		const webpackInstallation = await getDependencyInstallation(cwd, 'webpack');
+		const possibleWebpackDependencies = Object.keys(pkg.devDependencies || {}).filter(
+			(name) => !!~name.indexOf('webpack')
+		);
 
 		return {
-			webpack: possibleWebpackConfigs.length > 0,
+			webpack: true,
+			webpackInstallation,
+			webpackConfigurations: possibleWebpackConfigs,
+			webpackInstalledDependencies: possibleWebpackDependencies,
 		};
 	}
+
+	return {
+		webpack: possibleWebpackConfigs.length > 0,
+	};
 }

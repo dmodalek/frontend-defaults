@@ -1,9 +1,15 @@
-import { Analyzer, fileExists, getJSON } from '@namics/frontend-defaults-platform-core';
+import { join } from 'path';
+import {
+	DependencyInstallation,
+	fileExists,
+	getDependencyInstallation,
+	getJSON,
+} from '@namics/frontend-defaults-platform-core';
 
 export type NitroAnalyzerResult = {
 	nitro: boolean;
-	nitroVersion?: false | string;
 	nitroViewEngine?: string;
+	nitroInstallation?: DependencyInstallation;
 };
 
 type NitroConfigType = {
@@ -12,26 +18,24 @@ type NitroConfigType = {
 	};
 }
 
-export class NitroAnalzyer extends Analyzer<NitroAnalyzerResult> {
-	async analyze(): Promise<NitroAnalyzerResult> {
-		const yeomanPath = this.context.getPath('.yo-rc.json');
-		const doesYeomanExist = await fileExists(yeomanPath);
-		const yeomanConfig = await getJSON<NitroConfigType>(yeomanPath);
+export const nitroAnalyzer = async (cwd: string): Promise<NitroAnalyzerResult> => {
+	const yeomanPath = join(cwd, '.yo-rc.json');
+	const doesYeomanExist = await fileExists(yeomanPath);
+	const yeomanConfig = await getJSON<NitroConfigType>(yeomanPath);
 
-		if (doesYeomanExist) {
-			const nitroInstallation = this.packageAnalyzer.anyDependencyExists('generator-nitro');
-
-			return {
-				nitro: !!yeomanConfig['generator-nitro'],
-				nitroVersion: nitroInstallation ? nitroInstallation.version : false,
-				nitroViewEngine: yeomanConfig['generator-nitro']
-					? yeomanConfig['generator-nitro'].templateEngine || 'default'
-					: 'default',
-			};
-		}
+	if (doesYeomanExist) {
+		const nitroInstallation = await getDependencyInstallation(cwd, 'generator-nitro');
 
 		return {
-			nitro: false,
+			nitro: !!yeomanConfig['generator-nitro'],
+			nitroInstallation,
+			nitroViewEngine: yeomanConfig['generator-nitro']
+				? yeomanConfig['generator-nitro'].templateEngine || 'default'
+				: 'default',
 		};
 	}
+
+	return {
+		nitro: false,
+	};
 }

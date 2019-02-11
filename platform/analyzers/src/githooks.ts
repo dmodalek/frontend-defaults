@@ -1,29 +1,39 @@
-import { Analyzer, fileExists } from '@namics/frontend-defaults-platform-core';
+import {
+	DependencyInstallation,
+	fileExists,
+	getDependencyInstallation,
+	getPackageJSON,
+	IPackage
+	} from '@namics/frontend-defaults-platform-core';
+import { join } from 'path';
 
 export type GitHooksLocation = 'rc' | 'package';
 
 export type GitHooksAnalyzerResult = {
-	githooks: boolean;
-	githooksInstallation?: false | string;
-	githooksLocation?: GitHooksLocation;
+	gitHooks: boolean;
+	gitHooksInstallation?: DependencyInstallation;
+	gitHooksLocation?: GitHooksLocation;
 };
 
-export class GitHooksAnalyzer extends Analyzer<GitHooksAnalyzerResult> {
-	async analyze(): Promise<GitHooksAnalyzerResult> {
-		const doesGitHooksConfigExist = await fileExists(this.context.getPath('.huskyrc'));
-		const isHuskyInstalled = this.packageAnalyzer.anyDependencyExists('husky');
-		const doesGitHooksConfigExistInPkg = !!(this.package as any).husky;
+type PackageWithHuskyConfig = IPackage & {
+	husky: any
+}
 
-		if (doesGitHooksConfigExist || doesGitHooksConfigExistInPkg) {
-			return {
-				githooks: doesGitHooksConfigExist,
-				githooksLocation: doesGitHooksConfigExistInPkg ? 'package' : 'rc',
-				githooksInstallation: isHuskyInstalled ? isHuskyInstalled.version : false,
-			};
-		}
+export const githooksAnalyzer = async (cwd: string): Promise<GitHooksAnalyzerResult> => {
+	const doesGitHooksConfigExist = await fileExists(join(cwd, '.huskyrc'));
+	const gitHooksInstallation = await getDependencyInstallation(cwd, 'husky');
+	const pkg: PackageWithHuskyConfig = await getPackageJSON(cwd) as any;
 
+
+	if (doesGitHooksConfigExist || pkg.husky) {
 		return {
-			githooks: false,
+			gitHooks: doesGitHooksConfigExist,
+			gitHooksLocation: pkg.husky ? 'package' : 'rc',
+			gitHooksInstallation
 		};
 	}
+
+	return {
+		gitHooks: false,
+	};
 }

@@ -3,13 +3,23 @@
 exports[`Analyzers TypeScriptAnalyzer should analyze a project with installation correctly 1`] = `
 Object {
   "typescript": true,
-  "typescriptInstallation": "3.2.4",
+  "typescriptInstallation": Object {
+    "declared": "3.2.4",
+    "installed": "3.0.0",
+    "latest": "3.3.1",
+    "location": "devDependencies",
+  },
 }
 `;
 
 exports[`Analyzers TypeScriptAnalyzer should analyze a project without installation correctly 1`] = `
 Object {
   "typescript": true,
-  "typescriptInstallation": false,
+  "typescriptInstallation": Object {
+    "declared": null,
+    "installed": null,
+    "latest": "3.3.1",
+    "location": null,
+  },
 }
 `;

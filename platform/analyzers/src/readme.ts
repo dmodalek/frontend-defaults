@@ -1,16 +1,14 @@
 import { Analyzer, fileExists } from '@namics/frontend-defaults-platform-core';
+import { join } from 'path';
 
 export type ReadmeAnalyzerResult = {
 	readme: boolean;
 };
 
-export class ReadmeAnalyzer extends Analyzer<ReadmeAnalyzerResult> {
-	async analyze(): Promise<ReadmeAnalyzerResult> {
-		// TODO: Recognize also readme, Readme or ReadMe (case)
-		const readmeExists = await fileExists(this.context.getPath('README.md'));
+export const readmeAnalyzer = async (cwd: string): Promise<ReadmeAnalyzerResult> => {
+	const readmeExists = await fileExists(join(cwd, 'README.md'));
 
-		return {
-			readme: readmeExists,
-		};
-	}
+	return {
+		readme: readmeExists,
+	};
 }

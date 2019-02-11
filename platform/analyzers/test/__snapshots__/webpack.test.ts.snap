@@ -4,10 +4,15 @@ exports[`Analyzers WebpackAnalyzer should analyze a project and find configs as 
 Object {
   "webpack": true,
   "webpackConfigurations": Array [
-    "webpack.config.js",
     "webpack.prod.config.js",
+    "webpack.config.js",
   ],
-  "webpackInstallation": "4.29.0",
+  "webpackInstallation": Object {
+    "declared": "4.29.0",
+    "installed": null,
+    "latest": "4.29.1",
+    "location": "devDependencies",
+  },
   "webpackInstalledDependencies": Array [
     "webpack",
     "html-webpack-plugin",
@@ -23,7 +28,12 @@ Object {
     "webpack.config.js",
     "webpack.prod.config.js",
   ],
-  "webpackInstallation": "4.29.0",
+  "webpackInstallation": Object {
+    "declared": "4.29.0",
+    "installed": null,
+    "latest": "4.29.1",
+    "location": "devDependencies",
+  },
   "webpackInstalledDependencies": Array [
     "webpack",
     "html-webpack-plugin",

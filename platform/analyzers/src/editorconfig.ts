@@ -1,15 +1,12 @@
-import { Analyzer, fileExists } from '@namics/frontend-defaults-platform-core';
+import { fileExists } from '@namics/frontend-defaults-platform-core';
+import { join } from 'path';
 
 export type EditorconfigAnalyzerResult = {
 	editorConfig: boolean;
 };
 
-export class EditorconfigAnalyzer extends Analyzer<EditorconfigAnalyzerResult> {
-	async analyze(): Promise<EditorconfigAnalyzerResult> {
-		const eidtorConfigExists = await fileExists(this.context.getPath('.editorconfig'));
-
-		return {
-			editorConfig: eidtorConfigExists,
-		};
+export const editorConfigAnalyzer = async (cwd: string): Promise<EditorconfigAnalyzerResult> => {
+	return {
+		editorConfig: await fileExists(join(cwd, '.editorconfig'))
 	}
 }

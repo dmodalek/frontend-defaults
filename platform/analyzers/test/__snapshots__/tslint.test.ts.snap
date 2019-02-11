@@ -3,14 +3,24 @@
 exports[`Analyzers TSLintAnalyzer should analyze a project with installation correctly 1`] = `
 Object {
   "tslint": true,
-  "tslintInstallation": "5.12.1",
+  "tslintInstallation": Object {
+    "declared": "5.12.1",
+    "installed": null,
+    "latest": "5.12.1",
+    "location": "devDependencies",
+  },
 }
 `;
 
 exports[`Analyzers TSLintAnalyzer should analyze a project without installation correctly 1`] = `
 Object {
   "tslint": true,
-  "tslintInstallation": false,
+  "tslintInstallation": Object {
+    "declared": null,
+    "installed": null,
+    "latest": "5.12.1",
+    "location": null,
+  },
 }
 `;
 

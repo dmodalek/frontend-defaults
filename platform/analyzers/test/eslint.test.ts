@@ -1,39 +1,32 @@
 import { getFixtureContext } from './utils';
-import { ESLintAnalyzer, ESLintAnalyzerResult } from '../src/eslint';
-import { IContext, ProjectAnalyzer } from '@namics/frontend-defaults-platform-core';
+import { eslintAnalyzer } from '../src/eslint';
 
 const FIXTURE_INSTALLED = getFixtureContext('eslint-project');
 const FIXTURE_NOT_INSTALLED = getFixtureContext('eslint-project-not-installed');
 
-const getFixtureAnalyzer = async (context: IContext): Promise<ProjectAnalyzer<ESLintAnalyzerResult>> => {
-	return new ProjectAnalyzer<ESLintAnalyzerResult>({
-		context,
-		analyzers: [ESLintAnalyzer],
-	}).boot();
-};
-
 describe('Analyzers', () => {
 	describe('ESLintAnalyzer', () => {
-		it('should not crash the ProjectAnalyzer', async () => {
-			expect(async () => await getFixtureAnalyzer(await FIXTURE_INSTALLED)).not.toThrow();
+		it('should not crash', async () => {
+			expect(async () => await eslintAnalyzer(FIXTURE_INSTALLED)).not.toThrow();
 		});
 
 		it('should analyze a project with installation correctly', async () => {
-			const analyzer = await getFixtureAnalyzer(await FIXTURE_INSTALLED);
+			const analytics = await eslintAnalyzer(FIXTURE_INSTALLED);
 
-			expect(analyzer.analytics.eslint).toEqual(true);
-			expect(analyzer.analytics.eslintIgnore).toEqual(true);
-			expect(analyzer.analytics.eslintInstallation).toEqual('5.12.1');
-			expect(analyzer.analytics).toMatchSnapshot();
+			expect(analytics.eslint).toEqual(true);
+			expect(analytics.eslintIgnore).toEqual(true);
+			expect(analytics.eslintInstallation!.declared).toEqual('5.12.1');
+			expect(analytics.eslintInstallation!.installed).toEqual('5.12.1');
+			expect(analytics).toMatchSnapshot();
 		});
 
 		it('should analyze a project without ignore & installation correctly', async () => {
-			const analyzer = await getFixtureAnalyzer(await FIXTURE_NOT_INSTALLED);
+			const analytics = await eslintAnalyzer(FIXTURE_NOT_INSTALLED);
 
-			expect(analyzer.analytics.eslint).toEqual(true);
-			expect(analyzer.analytics.eslintIgnore).toEqual(false);
-			expect(analyzer.analytics.eslintInstallation).toEqual(false);
-			expect(analyzer.analytics).toMatchSnapshot();
+			expect(analytics.eslint).toEqual(true);
+			expect(analytics.eslintIgnore).toEqual(false);
+			expect(analytics.eslintInstallation!.installed).toBeFalsy();
+			expect(analytics).toMatchSnapshot();
 		});
 	});
 });

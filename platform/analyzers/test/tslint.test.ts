@@ -1,45 +1,38 @@
 import { getFixtureContext } from './utils';
-import { TSLintAnalyzer, TSLintAnalyzerResult } from '../src/tslint';
-import { IContext, ProjectAnalyzer } from '@namics/frontend-defaults-platform-core';
+import { tslintAnalyzer } from '../src/tslint';
 
 const FIXTURE = getFixtureContext('tslint-project');
 const FIXTURE_NOT_INSTALLED = getFixtureContext('tslint-project-not-installed');
 const FIXTURE_NOT_USED = getFixtureContext('default-project');
 
-const getFixtureAnalyzer = async (context: IContext): Promise<ProjectAnalyzer<TSLintAnalyzerResult>> => {
-	return new ProjectAnalyzer<TSLintAnalyzerResult>({
-		context,
-		analyzers: [TSLintAnalyzer],
-	}).boot();
-};
-
 describe('Analyzers', () => {
 	describe('TSLintAnalyzer', () => {
-		it('should not crash the ProjectAnalyzer', async () => {
-			expect(async () => await getFixtureAnalyzer(await FIXTURE)).not.toThrow();
+		it('should not crash', async () => {
+			expect(async () => await tslintAnalyzer(FIXTURE)).not.toThrow();
 		});
 
 		it('should analyze a project without tslint correctly', async () => {
-			const analyzer = await getFixtureAnalyzer(await FIXTURE_NOT_USED);
+			const analytics = await tslintAnalyzer(FIXTURE_NOT_USED);
 
-			expect(analyzer.analytics.tslint).toEqual(false);
-			expect(analyzer.analytics).toMatchSnapshot();
+			expect(analytics.tslint).toEqual(false);
+			expect(analytics).toMatchSnapshot();
 		});
 
 		it('should analyze a project with installation correctly', async () => {
-			const analyzer = await getFixtureAnalyzer(await FIXTURE);
+			const analytics = await tslintAnalyzer(FIXTURE);
 
-			expect(analyzer.analytics.tslint).toEqual(true);
-			expect(analyzer.analytics.tslintInstallation).toEqual('5.12.1');
-			expect(analyzer.analytics).toMatchSnapshot();
+			expect(analytics.tslint).toEqual(true);
+			expect(analytics.tslintInstallation!.declared).toEqual('5.12.1');
+			expect(analytics.tslintInstallation!.installed).toBeFalsy(); // FIXME: not mocked yet
+			expect(analytics).toMatchSnapshot();
 		});
 
 		it('should analyze a project without installation correctly', async () => {
-			const analyzer = await getFixtureAnalyzer(await FIXTURE_NOT_INSTALLED);
+			const analytics = await tslintAnalyzer(FIXTURE_NOT_INSTALLED);
 
-			expect(analyzer.analytics.tslint).toEqual(true);
-			expect(analyzer.analytics.tslintInstallation).toEqual(false);
-			expect(analyzer.analytics).toMatchSnapshot();
+			expect(analytics.tslint).toEqual(true);
+			expect(analytics.tslintInstallation!.installed).toBeFalsy();
+			expect(analytics).toMatchSnapshot();
 		});
 	});
 });

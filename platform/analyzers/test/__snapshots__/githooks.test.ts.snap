@@ -2,16 +2,26 @@
 
 exports[`Analyzers GitHooksAnalyzer should analyze a project with .huskyrc correctly 1`] = `
 Object {
-  "githooks": true,
-  "githooksInstallation": "1.3.1",
-  "githooksLocation": "rc",
+  "gitHooks": true,
+  "gitHooksInstallation": Object {
+    "declared": "1.3.1",
+    "installed": null,
+    "latest": "1.3.1",
+    "location": "devDependencies",
+  },
+  "gitHooksLocation": "rc",
 }
 `;
 
 exports[`Analyzers GitHooksAnalyzer should analyze a project with husky in package correctly 1`] = `
 Object {
-  "githooks": false,
-  "githooksInstallation": false,
-  "githooksLocation": "package",
+  "gitHooks": false,
+  "gitHooksInstallation": Object {
+    "declared": null,
+    "installed": null,
+    "latest": "1.3.1",
+    "location": null,
+  },
+  "gitHooksLocation": "package",
 }
 `;

@@ -1,25 +1,29 @@
-import { Analyzer, fileExists } from '@namics/frontend-defaults-platform-core';
+import {
+	Analyzer,
+	DependencyInstallation,
+	fileExists,
+	getDependencyInstallation
+	} from '@namics/frontend-defaults-platform-core';
+import { join } from 'path';
 
 export type TSLintAnalyzerResult = {
 	tslint: boolean;
-	tslintInstallation?: false | string;
+	tslintInstallation?: DependencyInstallation;
 };
 
-export class TSLintAnalyzer extends Analyzer<TSLintAnalyzerResult> {
-	async analyze(): Promise<TSLintAnalyzerResult> {
-		const doesTSLintExist = await fileExists(this.context.getPath('tslint.json'));
+export const tslintAnalyzer = async (cwd: string): Promise<TSLintAnalyzerResult> => {
+	const doesTSLintExist = await fileExists(join(cwd, 'tslint.json'));
 
-		if (doesTSLintExist) {
-			const eslintInstallation = this.packageAnalyzer.anyDependencyExists('tslint');
-
-			return {
-				tslint: doesTSLintExist,
-				tslintInstallation: eslintInstallation ? eslintInstallation.version : false,
-			};
-		}
+	if (doesTSLintExist) {
+		const tslintInstallation = await getDependencyInstallation(cwd, 'tslint');
 
 		return {
 			tslint: doesTSLintExist,
+			tslintInstallation,
 		};
 	}
+
+	return {
+		tslint: doesTSLintExist,
+	};
 }

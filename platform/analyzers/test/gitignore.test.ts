@@ -1,35 +1,28 @@
 import { getFixtureContext } from './utils';
-import { GitIgnoreAnalyzerResult, GitIgnoreAnalzyer } from '../src/gitignore';
+import { gitIgnoreAnalyzer } from '../src/gitignore';
 import { IContext, ProjectAnalyzer } from '@namics/frontend-defaults-platform-core';
 
 const FIXTURE_INSTALLED = getFixtureContext('gitignore-project');
 const FIXTURE_NOT_INSTALLED = getFixtureContext('default-project'); // has no .gitignore
 
-const getFixtureAnalyzer = async (context: IContext): Promise<ProjectAnalyzer<GitIgnoreAnalyzerResult>> => {
-	return new ProjectAnalyzer<GitIgnoreAnalyzerResult>({
-		context,
-		analyzers: [GitIgnoreAnalzyer],
-	}).boot();
-};
-
 describe('Analyzers', () => {
 	describe('GitIgnoreAnalyzer', () => {
 		it('should not crash the ProjectAnalyzer', async () => {
-			expect(async () => await getFixtureAnalyzer(await FIXTURE_INSTALLED)).not.toThrow();
+			expect(async () => await gitIgnoreAnalyzer(FIXTURE_INSTALLED)).not.toThrow();
 		});
 
 		it('should analyze a project with gitignore correctly', async () => {
-			const analyzer = await getFixtureAnalyzer(await FIXTURE_INSTALLED);
+			const analytics = await gitIgnoreAnalyzer(FIXTURE_INSTALLED);
 
-			expect(analyzer.analytics.gitignore).toEqual(true);
-			expect(analyzer.analytics).toMatchSnapshot();
+			expect(analytics.gitignore).toEqual(true);
+			expect(analytics).toMatchSnapshot();
 		});
 
 		it('should analyze a project without gitignore correctly', async () => {
-			const analyzer = await getFixtureAnalyzer(await FIXTURE_NOT_INSTALLED);
+			const analytics = await gitIgnoreAnalyzer(FIXTURE_NOT_INSTALLED);
 
-			expect(analyzer.analytics.gitignore).toEqual(false);
-			expect(analyzer.analytics).toMatchSnapshot();
+			expect(analytics.gitignore).toEqual(false);
+			expect(analytics).toMatchSnapshot();
 		});
 	});
 });

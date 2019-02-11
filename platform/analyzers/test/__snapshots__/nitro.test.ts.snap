@@ -3,7 +3,12 @@
 exports[`Analyzers NitroAnalyzer should analyze a project with installation and configs correctly 1`] = `
 Object {
   "nitro": true,
-  "nitroVersion": "4.3.2",
+  "nitroInstallation": Object {
+    "declared": "4.3.2",
+    "installed": null,
+    "latest": "4.3.4",
+    "location": "devDependencies",
+  },
   "nitroViewEngine": "hbs",
 }
 `;

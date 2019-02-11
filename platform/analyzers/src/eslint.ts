@@ -1,28 +1,27 @@
-import { Analyzer, fileExists } from '@namics/frontend-defaults-platform-core';
+import { DependencyInstallation, fileExists, getDependencyInstallation } from '@namics/frontend-defaults-platform-core';
+import { join } from 'path';
 
 export type ESLintAnalyzerResult = {
 	eslint: boolean;
 	eslintIgnore?: boolean;
-	eslintInstallation?: false | string;
+	eslintInstallation?: DependencyInstallation
 };
 
-export class ESLintAnalyzer extends Analyzer<ESLintAnalyzerResult> {
-	async analyze(): Promise<ESLintAnalyzerResult> {
-		const doesESLintExist = await fileExists(this.context.getPath('.eslintrc.js'));
+export const eslintAnalyzer = async (cwd: string): Promise<ESLintAnalyzerResult> => {
+	const doesESLintExist = await fileExists(join(cwd, '.eslintrc.js'));
 
-		if (doesESLintExist) {
-			const doesESLintIgnoreExist = await fileExists(this.context.getPath('.eslintignore'));
-			const eslintInstallation = this.packageAnalyzer.anyDependencyExists('eslint');
-
-			return {
-				eslint: doesESLintExist,
-				eslintIgnore: doesESLintIgnoreExist,
-				eslintInstallation: eslintInstallation ? eslintInstallation.version : false,
-			};
-		}
+	if (doesESLintExist) {
+		const doesESLintIgnoreExist = await fileExists(join(cwd, '.eslintignore'));
+		const eslintInstallation = await getDependencyInstallation(cwd, 'eslint');
 
 		return {
 			eslint: doesESLintExist,
+			eslintIgnore: doesESLintIgnoreExist,
+			eslintInstallation
 		};
 	}
+
+	return {
+		eslint: doesESLintExist,
+	};
 }

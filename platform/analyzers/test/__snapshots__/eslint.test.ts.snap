@@ -4,7 +4,12 @@ exports[`Analyzers ESLintAnalyzer should analyze a project with installation cor
 Object {
   "eslint": true,
   "eslintIgnore": true,
-  "eslintInstallation": "5.12.1",
+  "eslintInstallation": Object {
+    "declared": "5.12.1",
+    "installed": "5.12.1",
+    "latest": "5.13.0",
+    "location": "devDependencies",
+  },
 }
 `;
 
@@ -12,6 +17,11 @@ exports[`Analyzers ESLintAnalyzer should analyze a project without ignore & inst
 Object {
   "eslint": true,
   "eslintIgnore": false,
-  "eslintInstallation": false,
+  "eslintInstallation": Object {
+    "declared": null,
+    "installed": null,
+    "latest": "5.13.0",
+    "location": null,
+  },
 }
 `;
