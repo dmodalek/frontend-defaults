@@ -1,13 +1,10 @@
-import { ProjectAnalyzer, ProjectValidator } from "@namics/frontend-defaults-platform-core";
-import { NodeAnalyzer, NodeAnalyzerResult } from '@namics/frontend-defaults-platform-analyzers';
 import { checkInternetConnection, getFixtureDir, getLatestVersion } from './utils';
-import { NodeValidation } from '../src/node';
+import { nodeValidation } from '../src/node';
+import { nodeAnalyzer, NodeAnalyzerResult } from '@namics/frontend-defaults-platform-analyzers';
+import { analyze } from '@namics/frontend-defaults-platform-core';
 
-const getAnalyzerFor = async (fixtureContext: string): Promise<ProjectAnalyzer<NodeAnalyzerResult>> => {
-    return new ProjectAnalyzer<NodeAnalyzerResult>({
-        context: fixtureContext,
-        analyzers: [NodeAnalyzer],
-    }).boot();
+const generateAnalyticsFor = async (fixtureContext: string): Promise<NodeAnalyzerResult> => {
+    return await analyze(fixtureContext, nodeAnalyzer);
 };
 
 const FIXTURE_VERSION_MANAGER = getFixtureDir('version-manager-project');
@@ -26,84 +23,67 @@ describe('Validations', () => {
     describe('NodeValidations', () => {
         it('should not thorw any error', async () => {
             expect(async () => {
-                const analyzer = await getAnalyzerFor(FIXTURE_VERSION_MANAGER);
-                new ProjectValidator({
-                    analyzer,
-                    validations: [NodeValidation]
-                })
+                const analytics = await generateAnalyticsFor(FIXTURE_VERSION_MANAGER);
+                nodeValidation(FIXTURE_VERSION_MANAGER, analytics);
             }).not.toThrow();
         });
 
         it('should recognize need to install both managers', async () => {
-            const analyzer = await getAnalyzerFor(FIXTURE_NO_MANAGER);
-            const validator = new ProjectValidator({
-                analyzer,
-                validations: [NodeValidation]
-            });
+            const analytics = await generateAnalyticsFor(FIXTURE_NO_MANAGER);
+            const exceptions = await nodeValidation(FIXTURE_NO_MANAGER, analytics);
 
-            const patches = await validator.validate();
-            expect(patches).toHaveLength(2);
-            expect(patches).toMatchSnapshot();
 
-            const [nvmInstall, nodeVersionInstall] = patches;
-            expect(nvmInstall.patch).toEqual('NVMInstallPatch');
-            expect(nodeVersionInstall.patch).toEqual('NodeVersionInstallPatch');
+            expect(exceptions).toHaveLength(1);
+            expect(exceptions).toMatchSnapshot();
+            expect(exceptions[0].patch).toEqual(['NVMInstallPatch', 'NodeVersionInstallPatch']);
         });
 
         it('should recognize both managers and their updates', async () => {
-            const analyzer = await getAnalyzerFor(FIXTURE_VERSION_MANAGER);
-            const validator = new ProjectValidator({
-                analyzer,
-                validations: [NodeValidation]
-            });
+            const analytics = await generateAnalyticsFor(FIXTURE_VERSION_MANAGER);
+            const exceptions = await nodeValidation(FIXTURE_VERSION_MANAGER, analytics);
 
-            const patches = await validator.validate();
-            expect(patches).toHaveLength(2);
-            expect(patches).toMatchSnapshot();
+            expect(exceptions).toHaveLength(2);
+            expect(exceptions).toMatchSnapshot();
 
-            const [nvmUpdate, nodeVersionUpdate] = patches;
-            expect(nvmUpdate.patch).toEqual('UpdateNVMPatch');
-            expect(nvmUpdate.arguments.current).toEqual('9.0.0');
-            expect(nvmUpdate.arguments.latest).toEqual(await getLatestVersion('node', true));
-            expect(nodeVersionUpdate.patch).toEqual('UpdateNodeVersionPatch');
-            expect(nodeVersionUpdate.arguments.current).toEqual('9.0.0');
-            expect(nodeVersionUpdate.arguments.latest).toEqual(await getLatestVersion('node', true));
+            const [nvmUpdate, nodeVersionUpdate] = exceptions;
+            expect(nvmUpdate.patch![0]).toEqual(['UpdateNVMPatch', {
+                current: '9.0.0',
+                latest: await getLatestVersion('node', true)
+            }]);
+            expect(nodeVersionUpdate.patch![0]).toEqual(['UpdateNodeVersionPatch', {
+                current: '9.0.0',
+                latest: await getLatestVersion('node', true)
+            }]);
         });
 
         it('should recognize the nvm manager, nvm update and node-version installation', async () => {
-            const analyzer = await getAnalyzerFor(FIXTURE_NVM);
-            const validator = new ProjectValidator({
-                analyzer,
-                validations: [NodeValidation]
-            });
+            const analytics = await generateAnalyticsFor(FIXTURE_NVM);
+            const exceptions = await nodeValidation(FIXTURE_VERSION_MANAGER, analytics);
 
-            const patches = await validator.validate();
-            expect(patches).toHaveLength(2);
-            expect(patches).toMatchSnapshot();
+            expect(exceptions).toHaveLength(2);
+            expect(exceptions).toMatchSnapshot();
 
-            const [nvmUpdate, nodeVersionInstall] = patches;
-            expect(nvmUpdate.patch).toEqual('UpdateNVMPatch');
-            expect(nvmUpdate.arguments.current).toEqual('10.0.0');
-            expect(nvmUpdate.arguments.latest).toEqual(await getLatestVersion('node', true));
-            expect(nodeVersionInstall.patch).toEqual('NodeVersionInstallPatch');
+            const [nvmUpdate, nodeVersionInstall] = exceptions;
+            expect(nvmUpdate.patch![0]).toEqual(['UpdateNVMPatch', {
+                current: '10.0.0',
+                latest: await getLatestVersion('node', true)
+            }]);
+            expect(nodeVersionInstall.patch![0]).toEqual('NodeVersionInstallPatch');
         });
 
         it('should recognize the node-version manager, node-version update and nvm installation', async () => {
-            const analyzer = await getAnalyzerFor(FIXTURE_NODE_VERSION);
-            const validator = new ProjectValidator({
-                analyzer,
-                validations: [NodeValidation]
-            });
+            const analytics = await generateAnalyticsFor(FIXTURE_NODE_VERSION);
+            const exceptions = await nodeValidation(FIXTURE_VERSION_MANAGER, analytics);
 
-            const patches = await validator.validate();
-            expect(patches).toHaveLength(2);
-            expect(patches).toMatchSnapshot();
+            expect(exceptions).toHaveLength(2);
+            expect(exceptions).toMatchSnapshot();
 
-            const [nvmInstall, nodeVersionUpdate] = patches;
-            expect(nvmInstall.patch).toEqual('NVMInstallPatch');
-            expect(nodeVersionUpdate.patch).toEqual('UpdateNodeVersionPatch');
-            expect(nodeVersionUpdate.arguments.current).toEqual('10.0.0');
-            expect(nodeVersionUpdate.arguments.latest).toEqual(await getLatestVersion('node', true));
+            const [nvmInstall, nodeVersionUpdate] = exceptions;
+            expect(nvmInstall.patch![0]).toEqual('NVMInstallPatch');
+            expect(nodeVersionUpdate.patch![0]).toEqual(['UpdateNodeVersionPatch', {
+                current: '10.0.0',
+                latest: await getLatestVersion('node', true)
+            }]);
         });
     });
 });

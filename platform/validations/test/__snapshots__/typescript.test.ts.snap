@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Validations TypeScriptValidation should analyze a project without installation correctly 2`] = `
+Array [
+  Object {
+    "level": "ERROR",
+    "message": "Using TypeScript without explicit installtion is not allowed",
+    "patch": Array [
+      "TypeScriptInstallationPatch",
+    ],
+    "source": "TypeScriptValidation",
+  },
+]
+`;
+
+exports[`Validations TypeScriptValidation should validate a project with upgrades correctly 2`] = `
+Array [
+  Object {
+    "level": "INFO",
+    "message": "Please update TypeScript to v3.3.3 (installed: v3.0.0)",
+    "patch": Array [
+      Array [
+        "TypeScriptUpdatePatch",
+        Object {
+          "current": "3.0.0",
+          "latest": "3.3.3",
+        },
+      ],
+    ],
+    "source": "TypeScriptValidation",
+  },
+]
+`;

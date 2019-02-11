@@ -1,14 +1,14 @@
-import { ProjectValidator, ProjectAnalyzer, ValidationExceptionLevel } from '@namics/frontend-defaults-platform-core';
-import { getFixtureDir, checkInternetConnection } from './utils';
-import { NPMRCValidation } from '../src/npmrc';
-import { NPMRCAnalyzerResult, NPMRCAnalyzer } from '@namics/frontend-defaults-platform-analyzers';
+import { checkInternetConnection, getFixtureDir } from './utils';
+import { npmrcValidation } from '../src/npmrc';
+import { npmrcAnalyzer, NPMRCAnalyzerResult } from '@namics/frontend-defaults-platform-analyzers';
+import { analyze } from '@namics/frontend-defaults-platform-core';
 
-const getAnalyzerFor = async (fixtureContext: string): Promise<ProjectAnalyzer<NPMRCAnalyzerResult>> => {
-	return new ProjectAnalyzer<NPMRCAnalyzerResult>({
-		context: fixtureContext,
-		analyzers: [NPMRCAnalyzer],
-	}).boot();
+const generateAnalyticsFor = async (fixtureContext: string): Promise<NPMRCAnalyzerResult> => {
+	return await analyze(fixtureContext, npmrcAnalyzer);
 };
+
+const FIXTURE_NPMRC = getFixtureDir('npmrc-project');
+const FIXTURE_NO_NPMRC = getFixtureDir('default-project');
 
 beforeAll(async () => {
 	if (!(await checkInternetConnection())) {
@@ -21,56 +21,42 @@ describe('Validations', () => {
 	describe('NPMRCValidation', () => {
 		it('should be creatable without errors', () => {
 			expect(async () => {
-				const analyzer = await getAnalyzerFor(getFixtureDir('npmrc-project'));
-				new ProjectValidator({
-					analyzer,
-					validations: [NPMRCValidation],
-				});
+				const analytics = await generateAnalyticsFor(FIXTURE_NPMRC);
+				await npmrcValidation(FIXTURE_NPMRC, analytics);
 			}).not.toThrow();
 		});
 
 		it('should recognize no issues if everything is valid', async () => {
-			const analyzer = await getAnalyzerFor(getFixtureDir('npmrc-project'));
-			const validator = new ProjectValidator({
-				analyzer,
-				validations: [NPMRCValidation],
-			});
+			const analytics = await generateAnalyticsFor(FIXTURE_NPMRC);
+			const exceptions = await npmrcValidation(FIXTURE_NPMRC, analytics);
 
-			const patches = await validator.validate();
-			expect(patches).toHaveLength(0);
-			expect(validator.validation).toHaveLength(0);
+			expect(exceptions).toHaveLength(0);
+			expect(exceptions).toMatchSnapshot();
 		});
 
 		it('should recognize a missing npmrc', async () => {
-			const analyzer = await getAnalyzerFor(getFixtureDir('default-project'));
-			const validator = new ProjectValidator({
-				analyzer,
-				validations: [NPMRCValidation],
-			});
+			const analytics = await generateAnalyticsFor(FIXTURE_NO_NPMRC);
+			const exceptions = await npmrcValidation(FIXTURE_NPMRC, analytics);
 
-			const patches = await validator.validate();
-			expect(patches).toHaveLength(1);
-			expect(validator.validation).toHaveLength(1);
-			expect(patches[0].patch).toEqual('CreateNPMRCPatch');
-			expect(validator.validation[0].toString()).toMatchInlineSnapshot(
-				`"Validate NPMRCValidation: No .npmrc file found to reference to the correct node version [ERROR]"`
+			expect(exceptions).toHaveLength(1);
+			expect(exceptions[0]!.patch![0]).toEqual(['NPMRCPatch', { create: true }]);
+			expect(exceptions[0]!.source).toEqual('NPMRCValidation');
+			expect(exceptions[0].message).toMatchInlineSnapshot(
+				`"No .npmrc file found to reference to the correct node version"`
 			);
+			expect(exceptions).toMatchSnapshot();
 		});
 
 		it('should detect the missing save-exact flag', async () => {
-			const analyzer = await getAnalyzerFor(getFixtureDir('npmrc-project-no-save-exact'));
-			const validator = new ProjectValidator({
-				analyzer,
-				validations: [NPMRCValidation],
-			});
+			const analytics = await generateAnalyticsFor(getFixtureDir('npmrc-project-no-save-exact'));
+			const exceptions = await npmrcValidation(FIXTURE_NPMRC, analytics);
 
-			const patches = await validator.validate();
-			expect(patches).toHaveLength(1);
-			expect(validator.validation).toHaveLength(1);
-			expect(patches[0].patch).toEqual('AddSaveExactToNPMRCPatch');
-			expect(validator.validation[0].toString()).toMatchInlineSnapshot(
-				`"Validate NPMRCValidation: Save exact is not enabled in your .npmrc file [WARNING]"`
+			expect(exceptions).toHaveLength(1);
+			expect(exceptions[0].patch).toEqual(['NPMRCPatch']);
+			expect(exceptions[0].message).toMatchInlineSnapshot(
+				`"Save exact is not enabled in your .npmrc file"`
 			);
+			expect(exceptions).toMatchSnapshot();
 		});
 	});
 });

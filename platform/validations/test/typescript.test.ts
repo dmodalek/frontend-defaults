@@ -1,20 +1,20 @@
-import { ProjectValidator, ProjectAnalyzer, ValidationExceptionLevel } from '@namics/frontend-defaults-platform-core';
-import { TypeScriptValidation } from '../src/typescript';
-import { getFixtureDir, checkInternetConnection, getLatestVersion } from './utils';
-import { TypeScriptAnalyzer, TypeScriptAnalyzerResult } from '../../analyzers/src/typescript';
-import { TSLintAnalyzer, TSLintAnalyzerResult } from '../../analyzers/src/tslint';
+import { checkInternetConnection, getFixtureDir, getLatestVersion } from './utils';
+import { tslintAnalyzer, TSLintAnalyzerResult } from '../../analyzers/src/tslint';
+import { typescriptAnalyzer, TypeScriptAnalyzerResult } from '../../analyzers/src/typescript';
+import { typescriptValidation } from '../src/typescript';
+import { analyze, ValidationExceptionLevel } from '@namics/frontend-defaults-platform-core';
 
-const getAnalyzerFor = async (
+const generateAnalyticsFor = async (
 	fixtureContext: string
-): Promise<ProjectAnalyzer<TypeScriptAnalyzerResult & TSLintAnalyzerResult>> => {
-	return new ProjectAnalyzer<TypeScriptAnalyzerResult & TSLintAnalyzerResult>({
-		context: fixtureContext,
-		analyzers: [TypeScriptAnalyzer, TSLintAnalyzer],
-	}).boot();
+): Promise<TypeScriptAnalyzerResult & TSLintAnalyzerResult> => {
+	return await analyze(fixtureContext, typescriptAnalyzer, tslintAnalyzer);
 };
 
+const FIXTURE_TS = getFixtureDir('ts-project');
+const FIXTURE_NOT_INSTALLED = getFixtureDir('ts-project-not-installed');
+
 beforeAll(async () => {
-	if (!await checkInternetConnection()) {
+	if (!(await checkInternetConnection())) {
 		console.debug(`Please only run tests while connected to the internet!`);
 		process.exit(1); // kill child worker
 	}
@@ -24,51 +24,42 @@ describe('Validations', () => {
 	describe('TypeScriptValidation', () => {
 		it('should be creatable without errors', () => {
 			expect(async () => {
-				const analyzer = await getAnalyzerFor(getFixtureDir('ts-project'));
-				new ProjectValidator({
-					analyzer,
-					validations: [TypeScriptValidation],
-				});
+				const analytics = await generateAnalyticsFor(FIXTURE_TS);
+				await typescriptValidation(FIXTURE_TS, analytics);
 			}).not.toThrow();
 		});
 
 		it('should validate a project with upgrades correctly', async () => {
-			const analyzer = await getAnalyzerFor(getFixtureDir('ts-project'));
-			const validator = await new ProjectValidator({
-				analyzer,
-				context: getFixtureDir('ts-project'),
-				validations: [TypeScriptValidation],
-			});
+			const analytics = await generateAnalyticsFor(FIXTURE_TS);
+			const results = await typescriptValidation(FIXTURE_TS, analytics);
+			const [upgradeInfo] = results;
 
-			const patches = await validator.validate();
-			expect(patches).toHaveLength(1);
-			expect(validator.validation).toHaveLength(1);
-
-			const [upgradeInfo] = validator.validation;
+			expect(results).toHaveLength(1);
 			expect(upgradeInfo.level).toEqual(ValidationExceptionLevel.info);
-			expect(upgradeInfo.patches).toBeTruthy();
-			expect(upgradeInfo.patches![0].patch).toEqual('TypeScriptUpdatePatch');
-			expect(upgradeInfo.patches![0].arguments.current).toEqual('3.1.6');
-			expect(upgradeInfo.patches![0].arguments.latest).toEqual(await getLatestVersion('typescript'));
-			expect(upgradeInfo.toString()).toMatchInlineSnapshot(
-				`"Validate TypeScriptValidation: Please update TypeScript to v3.2.4 (installed: v3.1.6) [INFO]"`
+			expect(upgradeInfo.patch![0]).toEqual([
+				'TypeScriptUpdatePatch',
+				{
+					current: '3.0.0',
+					latest: await getLatestVersion('typescript'),
+				},
+			]);
+			expect(upgradeInfo.message).toMatchInlineSnapshot(
+				`"Please update TypeScript to v3.3.3 (installed: v3.0.0)"`
 			);
+			expect(results).toMatchSnapshot();
 		});
 
 		it('should analyze a project without installation correctly', async () => {
-			const analyzer = await getAnalyzerFor(getFixtureDir('ts-project-not-installed'));
-			const validator = await new ProjectValidator({
-				analyzer,
-				context: getFixtureDir('ts-project-not-installed'),
-				validations: [TypeScriptValidation],
-			});
+			const analytics = await generateAnalyticsFor(FIXTURE_NOT_INSTALLED);
+			const results = await typescriptValidation(FIXTURE_TS, analytics);
+			const singleIssue = results[0];
 
-			const patches = await validator.validate();
-			expect(patches).toHaveLength(1);
-			expect(patches[0].patch).toEqual('TypeScriptInstallationPatch');
-			expect(validator.validation[0].toString()).toMatchInlineSnapshot(
-				`"Validate TypeScriptValidation: Using TypeScript without explicit installtion is not allowed [ERROR]"`
+			expect(results).toHaveLength(1);
+			expect(singleIssue.patch).toEqual(['TypeScriptInstallationPatch']);
+			expect(singleIssue.message).toMatchInlineSnapshot(
+				`"Using TypeScript without explicit installtion is not allowed"`
 			);
+			expect(results).toMatchSnapshot();
 		});
 	});
 });

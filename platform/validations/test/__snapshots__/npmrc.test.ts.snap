@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Validations NPMRCValidation should detect the missing save-exact flag 2`] = `
+Array [
+  Object {
+    "level": "WARNING",
+    "message": "Save exact is not enabled in your .npmrc file",
+    "patch": Array [
+      "NPMRCPatch",
+    ],
+    "source": "NPMRCValidation",
+  },
+]
+`;
+
+exports[`Validations NPMRCValidation should recognize a missing npmrc 2`] = `
+Array [
+  Object {
+    "level": "ERROR",
+    "message": "No .npmrc file found to reference to the correct node version",
+    "patch": Array [
+      Array [
+        "NPMRCPatch",
+        Object {
+          "create": true,
+        },
+      ],
+    ],
+    "source": "NPMRCValidation",
+  },
+]
+`;
+
+exports[`Validations NPMRCValidation should recognize no issues if everything is valid 1`] = `Array []`;

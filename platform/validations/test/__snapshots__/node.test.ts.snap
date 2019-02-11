@@ -3,18 +3,32 @@
 exports[`Validations NodeValidations should recognize both managers and their updates 1`] = `
 Array [
   Object {
-    "arguments": Object {
-      "current": "9.0.0",
-      "latest": "10.15.0",
-    },
-    "patch": "UpdateNVMPatch",
+    "level": "INFO",
+    "message": "There's a newer node LTS version available for nvm, try upgrading",
+    "patch": Array [
+      Array [
+        "UpdateNVMPatch",
+        Object {
+          "current": "9.0.0",
+          "latest": "10.15.1",
+        },
+      ],
+    ],
+    "source": "NodeValidation",
   },
   Object {
-    "arguments": Object {
-      "current": "9.0.0",
-      "latest": "10.15.0",
-    },
-    "patch": "UpdateNodeVersionPatch",
+    "level": "INFO",
+    "message": "There's a newer node LTS version available for node-version, try upgrading",
+    "patch": Array [
+      Array [
+        "UpdateNodeVersionPatch",
+        Object {
+          "current": "9.0.0",
+          "latest": "10.15.1",
+        },
+      ],
+    ],
+    "source": "NodeValidation",
   },
 ]
 `;
@@ -22,10 +36,13 @@ Array [
 exports[`Validations NodeValidations should recognize need to install both managers 1`] = `
 Array [
   Object {
-    "patch": "NVMInstallPatch",
-  },
-  Object {
-    "patch": "NodeVersionInstallPatch",
+    "level": "ERROR",
+    "message": "No node version manager used, integrate node-version or/and nvm",
+    "patch": Array [
+      "NVMInstallPatch",
+      "NodeVersionInstallPatch",
+    ],
+    "source": "NodeValidation",
   },
 ]
 `;
@@ -33,14 +50,26 @@ Array [
 exports[`Validations NodeValidations should recognize the node-version manager, node-version update and nvm installation 1`] = `
 Array [
   Object {
-    "patch": "NVMInstallPatch",
+    "level": "INFO",
+    "message": "No .nvmrc ressource file found, you might add one",
+    "patch": Array [
+      "NVMInstallPatch",
+    ],
+    "source": "NodeValidation",
   },
   Object {
-    "arguments": Object {
-      "current": "10.0.0",
-      "latest": "10.15.0",
-    },
-    "patch": "UpdateNodeVersionPatch",
+    "level": "INFO",
+    "message": "There's a newer node LTS version available for node-version, try upgrading",
+    "patch": Array [
+      Array [
+        "UpdateNodeVersionPatch",
+        Object {
+          "current": "10.0.0",
+          "latest": "10.15.1",
+        },
+      ],
+    ],
+    "source": "NodeValidation",
   },
 ]
 `;
@@ -48,14 +77,26 @@ Array [
 exports[`Validations NodeValidations should recognize the nvm manager, nvm update and node-version installation 1`] = `
 Array [
   Object {
-    "arguments": Object {
-      "current": "10.0.0",
-      "latest": "10.15.0",
-    },
-    "patch": "UpdateNVMPatch",
+    "level": "INFO",
+    "message": "There's a newer node LTS version available for nvm, try upgrading",
+    "patch": Array [
+      Array [
+        "UpdateNVMPatch",
+        Object {
+          "current": "10.0.0",
+          "latest": "10.15.1",
+        },
+      ],
+    ],
+    "source": "NodeValidation",
   },
   Object {
-    "patch": "NodeVersionInstallPatch",
+    "level": "WARNING",
+    "message": "No .node-version ressource file found, you might add one",
+    "patch": Array [
+      "NodeVersionInstallPatch",
+    ],
+    "source": "NodeValidation",
   },
 ]
 `;
