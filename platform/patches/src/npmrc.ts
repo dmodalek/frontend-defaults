@@ -5,6 +5,15 @@ import {
     PatchResult
     } from '@namics/frontend-defaults-platform-core';
 
+
+
+export const npmrcPatch = () => {
+
+    return {
+        id: 'NPMRCPatch'
+    }
+}
+
 export class NPMRCPatch extends Patch<void> {
     public id = 'npmrc';
 
