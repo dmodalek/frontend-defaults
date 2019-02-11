@@ -5,12 +5,29 @@ import {
     PatchResult
     } from '@namics/frontend-defaults-platform-core';
 
+type SinglePatchConfiguration = {
+    id: string,
+    actions: Array<() => any>
+}
 
+type PatchConfiguration = SinglePatchConfiguration | SinglePatchConfiguration[];
 
-export const npmrcPatch = () => {
+type NPMRCPatchArguments = {
+    create?: boolean
+}
+
+export const npmrcPatch = async (cwd: string, args?: NPMRCPatchArguments): Promise<PatchConfiguration> => {
+    let currentFileContents = '';
+
+    if (await fileExists(this.npmrcPath)) {
+        currentFileContents = await getFileContents(this.npmrcPath);
+    }
 
     return {
-        id: 'NPMRCPatch'
+        id: 'NPMRCPatch',
+        actions: [
+            // TODO: define actions
+        ]
     }
 }
 
