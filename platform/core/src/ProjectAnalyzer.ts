@@ -1,10 +1,10 @@
 import { AnalyzerConfiguration, IAnalyzer } from './Analyzer';
 import { IContext } from './Context';
-import { PackageAnalyzer } from './PackageAnalyzer';
 import { Constructable } from './types/Constructable';
 import { IPackage } from './types/Package';
 import { displayPath, getJSON } from './utils/fs';
 import { join } from 'path';
+// import { PackageAnalyzer } from './PackageAnalyzer';
 
 type ProjectAnalyzerConstructionOptions = {
 	context: IContext;

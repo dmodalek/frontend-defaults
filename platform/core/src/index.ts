@@ -1,10 +1,40 @@
-export * from './types/Constructable';
-export * from './types/Package';
+// utility and core types
+export { Constructable } from './types/Constructable';
+export { IPackage } from './types/Package';
+export { ValidationSeverityLevel, ValidationResult } from './utils/validation';
 
-export * from './utils/fs';
-export * from './utils/version';
-export * from './utils/template';
+// filesystem utilities
+export {
+    getFileContents,
+    getJSON,
+    mergeJSON,
+    fileExists,
+    findFilesByPattern,
+    displayPath,
+} from './utils/fs';
 
+// version utilities
+export {
+    DependencyInstallation,
+    getDependencyInstallation,
+    getInstalledDependencyVersion,
+    checkDependencyUpdate,
+    getLatestLTSVersion,
+    checkNewerLTSVersion,
+} from './utils/version';
+
+// package utilities
+export {
+    getPackageJSON
+} from './utils/package';
+
+// templating utilities
+export { template } from './utils/template';
+
+// runtime functions
+export { analyze } from './utils/analyze';
+
+// TODO: clean those imports --> not needed anymore
 export * from './Context';
 export * from './ProjectAnalyzer';
 export * from './ProjectValidator';

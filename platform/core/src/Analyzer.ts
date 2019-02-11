@@ -1,6 +1,6 @@
 import { IContext } from './Context';
-import { PackageAnalyzer } from './PackageAnalyzer';
 import { IPackage } from './types/Package';
+// import { PackageAnalyzer } from './PackageAnalyzer';
 
 /**
  * Construction options for each analyzer
@@ -54,7 +54,7 @@ export abstract class Analyzer<Result> implements IAnalyzer<Result> {
 	 * Reference to the projects package analyzer instance
 	 * @type {PackageAnalyzer}
 	 */
-	protected packageAnalyzer: PackageAnalyzer;
+	// protected packageAnalyzer: PackageAnalyzer;
 
 	constructor(configuration: AnalyzerConfiguration) {
 		this.context = configuration.context;

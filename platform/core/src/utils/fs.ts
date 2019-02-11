@@ -1,5 +1,10 @@
-import { readFile, writeFile, access } from 'fs';
 import { F_OK } from 'constants';
+import {
+	access,
+	appendFile,
+	readFile,
+	writeFile
+	} from 'fs';
 import globby from 'globby';
 
 export async function getFileContents(path: string): Promise<string> {
@@ -20,7 +25,54 @@ export async function getJSON<Result>(path: string): Promise<Result> {
 		const result: Result = JSON.parse(contents);
 		return result;
 	} catch (err) {
-		return err;
+		throw err;
+	}
+}
+
+type MergeFilesResult = {
+	base: string;
+	overrides: string;
+	merged: string;
+};
+
+/**
+ * Merge any two files into the base and returns information about the merge
+ * @param baseSourcePath path to the main file
+ * @param mergableSourcePath path to the file to merge
+ * @param dry if this should be a dry run
+ */
+export async function mergeFiles(
+	baseSourcePath: string,
+	mergableSourcePath: string,
+	dry: boolean = false
+): Promise<MergeFilesResult> {
+	try {
+		const baseContents = await getFileContents(baseSourcePath);
+		const mergableContents = await getFileContents(mergableSourcePath);
+		const theoreticalMerge = [baseContents, mergableContents].join('\n');
+
+		return await new Promise<MergeFilesResult>((resolve, reject) => {
+			if (dry) {
+				// return theoretical merge content
+				return resolve({
+					merged: theoreticalMerge,
+					base: baseContents,
+					overrides: mergableContents,
+				});
+			}
+
+			appendFile(baseSourcePath, mergableContents, (err) => {
+				err
+					? reject(err)
+					: resolve({
+						merged: theoreticalMerge,
+						base: baseContents,
+						overrides: mergableContents,
+					});
+			});
+		});
+	} catch (err) {
+		throw err;
 	}
 }
 
@@ -68,7 +120,7 @@ export async function mergeJSON<Result extends Object>(
 			});
 		});
 	} catch (err) {
-		return err;
+		throw err;
 	}
 }
 

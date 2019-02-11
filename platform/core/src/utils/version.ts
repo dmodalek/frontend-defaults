@@ -1,14 +1,39 @@
 import { getJSON } from './fs';
+import { getPackageJSON } from './package';
 import { IPackage } from '../types/Package';
-import { join } from 'path';
 import latestVersion from 'latest-version';
+import { join } from 'path';
 import semver from 'semver';
 
-export async function getInstalledDependencyVersion(dependency: string): Promise<string | undefined> {
+export type DependencyInstallation = {
+	location: 'devDependencies' | 'dependencies' | null;
+	declared: string | null,
+	installed: string | null,
+	latest: string | null
+};
+
+export async function getDependencyInstallation(cwd: string, dependency: string): Promise<DependencyInstallation> {
+	const installed = await getInstalledDependencyVersion(cwd, dependency) || null;
+	const pkg = await getPackageJSON(cwd);
+	const declared = {
+		dev: pkg.devDependencies![dependency],
+		prod: pkg.dependencies![dependency]
+	};
+	const latest = await latestVersion(dependency);
+
+	return {
+		location: declared.dev ? 'devDependencies' : declared.prod ? 'dependencies' : null,
+		declared: declared.dev || declared.prod || null,
+		installed,
+		latest,
+	};
+}
+
+export async function getInstalledDependencyVersion(cwd: string = process.cwd(), dependency: string): Promise<string | undefined> {
 	try {
 		// TODO: should we use require.resolve instead of direct access
 		const installedPackage = await getJSON<IPackage>(
-			join(process.cwd(), 'node_modules', dependency, 'package.json')
+			join(cwd, 'node_modules', dependency, 'package.json')
 		);
 		return installedPackage.version;
 	} catch (err) {
@@ -17,6 +42,7 @@ export async function getInstalledDependencyVersion(dependency: string): Promise
 }
 
 export async function checkDependencyUpdate(
+	cwd: string = process.cwd(),
 	dependency: string
 ): Promise<{
 	current?: string;
@@ -24,7 +50,7 @@ export async function checkDependencyUpdate(
 	upgradable: boolean;
 }> {
 	try {
-		const installedVersion = await getInstalledDependencyVersion(dependency);
+		const installedVersion = await getInstalledDependencyVersion(cwd, dependency);
 		const availableLatestVersion = await latestVersion(dependency);
 
 		if (installedVersion) {

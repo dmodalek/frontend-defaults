@@ -1,7 +1,7 @@
-import { IPackage } from "./types/Package";
-import { PackageAnalyzer } from './PackageAnalyzer';
-import { getJSON, displayPath, fileExists } from './utils/fs';
+import { IPackage } from './types/Package';
+import { displayPath, fileExists, getJSON } from './utils/fs';
 import { join } from 'path';
+// import { PackageAnalyzer } from './PackageAnalyzer';
 
 type ContextOptions = {
     root?: string,
@@ -14,7 +14,6 @@ type ContextSaveOptions = {
 export interface IContext {
     monorepo: boolean,
     package: IPackage,
-    packageAnalyzer: PackageAnalyzer,
     root: string;
     bind(): Promise<IContext>;
     getPath(lookup: string): string;
@@ -23,7 +22,7 @@ export interface IContext {
 export class Context implements IContext {
     public monorepo: boolean;
     private rawPackage: IPackage;
-    private internalPackageAnalyzer: PackageAnalyzer;
+    private internalPackageAnalyzer: any;
     private options: ContextSaveOptions;
 
     constructor(options: ContextOptions) {
@@ -48,13 +47,13 @@ export class Context implements IContext {
             // generate save package to use for further purposes e.g. getting dependencies
             pkg = this.savePackageAccess(pkg);
             this.rawPackage = pkg;
-            this.internalPackageAnalyzer = new PackageAnalyzer(this.rawPackage);
+            // this.internalPackageAnalyzer = new PackageAnalyzer(this.rawPackage);
 
             // we try to guess whether this context is a monorepo or not,
             // this flag won't be 100% accurate atm, we need to find a better way
             this.monorepo = await fileExists(join(this.root, 'lerna.json')) || await fileExists(join(this.root, 'nx.json'));
 
-            return this;
+            return this as any;
         } catch (err) {
             throw new Error(`Invalid context: package.json is missing in ${displayPath(this.root)}`);
         }
@@ -73,9 +72,9 @@ export class Context implements IContext {
         return this.rawPackage;
     }
 
-    public get packageAnalyzer(): PackageAnalyzer {
-        return this.internalPackageAnalyzer;
-    }
+    // public get packageAnalyzer(): PackageAnalyzer {
+    //     return this.internalPackageAnalyzer;
+    // }
 
     /**
      * Resolves a path in the current context
