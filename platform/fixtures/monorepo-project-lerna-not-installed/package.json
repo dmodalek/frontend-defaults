@@ -2,5 +2,7 @@
   "name": "fixture-monorepo-lerna-project",
   "version": "0.0.1",
   "private": false,
-  "devDependencies": {}
+  "devDependencies": {
+    "lerna": "3.0.0"
+  }
 }
