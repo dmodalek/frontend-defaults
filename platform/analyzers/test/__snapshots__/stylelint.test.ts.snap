@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Analyzers StylelintAnalyzer should analyze a project with installation correctly 1`] = `
+Object {
+  "stylelint": true,
+  "stylelintIgnore": true,
+  "stylelintInstallation": Object {
+    "declared": "9.0.0",
+    "installed": "9.10.1",
+    "latest": Any<String>,
+    "location": "devDependencies",
+  },
+}
+`;
+
+exports[`Analyzers StylelintAnalyzer should analyze a project without ignore & installation correctly 1`] = `
+Object {
+  "stylelint": true,
+  "stylelintIgnore": false,
+  "stylelintInstallation": Object {
+    "declared": null,
+    "installed": null,
+    "latest": Any<String>,
+    "location": null,
+  },
+}
+`;
