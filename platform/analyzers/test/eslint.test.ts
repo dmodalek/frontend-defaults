@@ -17,7 +17,11 @@ describe('Analyzers', () => {
 			expect(analytics.eslintIgnore).toEqual(true);
 			expect(analytics.eslintInstallation!.declared).toEqual('5.12.1');
 			expect(analytics.eslintInstallation!.installed).toEqual('5.12.1');
-			expect(analytics).toMatchSnapshot();
+			expect(analytics).toMatchSnapshot({
+				eslintInstallation: {
+					latest: expect.any(String)
+				}
+			});
 		});
 
 		it('should analyze a project without ignore & installation correctly', async () => {
@@ -26,7 +30,11 @@ describe('Analyzers', () => {
 			expect(analytics.eslint).toEqual(true);
 			expect(analytics.eslintIgnore).toEqual(false);
 			expect(analytics.eslintInstallation!.installed).toBeFalsy();
-			expect(analytics).toMatchSnapshot();
+			expect(analytics).toMatchSnapshot({
+				eslintInstallation: {
+					latest: expect.any(String)
+				}
+			});
 		});
 	});
 });

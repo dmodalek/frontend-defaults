@@ -1,0 +1,62 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Analyzers RepositoryAnalyzer should analyze a lerna project correctly 1`] = `
+Object {
+  "declared": "3.0.0",
+  "installed": "3.13.1",
+  "latest": Any<String>,
+  "location": "devDependencies",
+}
+`;
+
+exports[`Analyzers RepositoryAnalyzer should analyze a lerna project correctly 2`] = `
+Object {
+  "packages": Array [
+    "packages/*",
+  ],
+  "version": "3.0.0",
+}
+`;
+
+exports[`Analyzers RepositoryAnalyzer should analyze a lerna project without installation correctly 1`] = `
+Object {
+  "declared": "3.0.0",
+  "installed": null,
+  "latest": Any<String>,
+  "location": "devDependencies",
+}
+`;
+
+exports[`Analyzers RepositoryAnalyzer should analyze a nrwl/nx project correctly 1`] = `
+Object {
+  "declared": "6.2.0",
+  "installed": "7.7.2",
+  "latest": Any<String>,
+  "location": "devDependencies",
+}
+`;
+
+exports[`Analyzers RepositoryAnalyzer should analyze a nrwl/nx project correctly 2`] = `
+Object {
+  "implicitDependencies": Object {
+    "nx.json": "*",
+  },
+  "npmScope": "nx-examples",
+  "projects": Object {
+    "example": Object {
+      "tags": Array [
+        "test-suite",
+      ],
+    },
+  },
+}
+`;
+
+exports[`Analyzers RepositoryAnalyzer should analyze a nrwl/nx project without installation correctly 1`] = `
+Object {
+  "declared": "6.2.0",
+  "installed": null,
+  "latest": Any<String>,
+  "location": "devDependencies",
+}
+`;

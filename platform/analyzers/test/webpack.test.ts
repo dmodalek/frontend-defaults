@@ -17,7 +17,11 @@ describe('Analyzers', () => {
 			expect(analytics.webpack).toEqual(true);
 			expect(analytics.webpackInstallation!.declared).toEqual('4.29.0');
 			expect(analytics.webpackInstallation!.installed).toBeFalsy(); // FIXME: not mocked yet
-			expect(analytics).toMatchSnapshot();
+			expect(analytics).toMatchSnapshot({
+				webpackInstallation: {
+					"latest": expect.any(String)
+				}
+			});
 		});
 
 		it('should analyze a project and find configs as well as plugins correctly', async () => {
@@ -27,7 +31,11 @@ describe('Analyzers', () => {
 			expect(analytics.webpackConfigurations).toHaveLength(2);
 			// ['webpack', 'html-webpack-plugin', 'ts-config-webpack-plugin']
 			expect(analytics.webpackInstalledDependencies).toHaveLength(3);
-			expect(analytics).toMatchSnapshot();
+			expect(analytics).toMatchSnapshot({
+				webpackInstallation: {
+					"latest": expect.any(String)
+				}
+			});
 		});
 	});
 });

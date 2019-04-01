@@ -7,7 +7,7 @@ Object {
   "eslintInstallation": Object {
     "declared": "5.12.1",
     "installed": "5.12.1",
-    "latest": "5.13.0",
+    "latest": Any<String>,
     "location": "devDependencies",
   },
 }
@@ -20,7 +20,7 @@ Object {
   "eslintInstallation": Object {
     "declared": null,
     "installed": null,
-    "latest": "5.13.0",
+    "latest": Any<String>,
     "location": null,
   },
 }

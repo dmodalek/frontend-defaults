@@ -42,5 +42,14 @@ describe('Analyzers', () => {
 			expect(nodeVersionManagerInfo!.nvm).toEqual('10.0.0');
 			expect(analytics).toMatchSnapshot();
 		});
+
+		it('should analyze a project with nvmrc and node-version correctly', async () => {
+			const analytics = await nodeAnalyzer(FIXTURE_BOTH);
+			const { nodeVersion, nodeVersionManagerInfo } = analytics;
+
+			expect(nodeVersion).toEqual(true);
+			expect(nodeVersionManagerInfo).toBeTruthy();
+			expect(analytics).toMatchSnapshot();
+		});
 	});
 });

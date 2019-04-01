@@ -16,7 +16,11 @@ describe('Analyzers', () => {
 			expect(analytics.typescript).toEqual(true);
 			expect(analytics.typescriptInstallation!.declared).toEqual('3.2.4');
 			expect(analytics.typescriptInstallation!.installed).toEqual('3.0.0');
-			expect(analytics).toMatchSnapshot();
+			expect(analytics).toMatchSnapshot({
+				typescriptInstallation: {
+					"latest": expect.any(String)
+				}
+			});
 		});
 
 		it('should analyze a project without installation correctly', async () => {
@@ -24,7 +28,11 @@ describe('Analyzers', () => {
 
 			expect(analytics.typescript).toEqual(true);
 			expect(analytics.typescriptInstallation!.installed).toBeFalsy();
-			expect(analytics).toMatchSnapshot();
+			expect(analytics).toMatchSnapshot({
+				typescriptInstallation: {
+					"latest": expect.any(String)
+				}
+			});
 		});
 	});
 });

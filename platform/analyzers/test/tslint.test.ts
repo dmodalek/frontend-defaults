@@ -24,7 +24,11 @@ describe('Analyzers', () => {
 			expect(analytics.tslint).toEqual(true);
 			expect(analytics.tslintInstallation!.declared).toEqual('5.12.1');
 			expect(analytics.tslintInstallation!.installed).toBeFalsy(); // FIXME: not mocked yet
-			expect(analytics).toMatchSnapshot();
+			expect(analytics).toMatchSnapshot({
+				tslintInstallation: {
+					"latest": expect.any(String)
+				}
+			});
 		});
 
 		it('should analyze a project without installation correctly', async () => {
@@ -32,7 +36,11 @@ describe('Analyzers', () => {
 
 			expect(analytics.tslint).toEqual(true);
 			expect(analytics.tslintInstallation!.installed).toBeFalsy();
-			expect(analytics).toMatchSnapshot();
+			expect(analytics).toMatchSnapshot({
+				tslintInstallation: {
+					"latest": expect.any(String)
+				}
+			});
 		});
 	});
 });

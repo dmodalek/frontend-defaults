@@ -10,6 +10,16 @@ Object {
 }
 `;
 
+exports[`Analyzers NodeAnalyzer should analyze a project with nvmrc and node-version correctly 1`] = `
+Object {
+  "nodeVersion": true,
+  "nodeVersionManagerInfo": Object {
+    "node-version": "9.0.0",
+    "nvm": "9.0.0",
+  },
+}
+`;
+
 exports[`Analyzers NodeAnalyzer should analyze a project with nvmrc correctly 1`] = `
 Object {
   "nodeVersion": true,

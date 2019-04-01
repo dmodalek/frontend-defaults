@@ -6,7 +6,7 @@ Object {
   "nitroInstallation": Object {
     "declared": "4.3.2",
     "installed": null,
-    "latest": "4.3.4",
+    "latest": Any<String>,
     "location": "devDependencies",
   },
   "nitroViewEngine": "hbs",
