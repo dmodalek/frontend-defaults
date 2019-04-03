@@ -23,7 +23,7 @@ describe('Analyzers', () => {
 
 			expect(analytics.tslint).toEqual(true);
 			expect(analytics.tslintInstallation!.declared).toEqual('5.12.1');
-			expect(analytics.tslintInstallation!.installed).toBeFalsy(); // FIXME: not mocked yet
+			expect(analytics.tslintInstallation!.installed).toEqual('5.15.0');
 			expect(analytics).toMatchSnapshot({
 				tslintInstallation: {
 					"latest": expect.any(String)

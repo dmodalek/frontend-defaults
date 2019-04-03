@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Analyzers ContributebuddyAnalyzer should analyze a project with contribute-buddy correctly 1`] = `
+Object {
+  "contributebuddy": true,
+  "contributebuddyConfigFolder": "/Users/jbiasi/Namics/OpenSource/frontend-defaults/platform/analyzers/node_modules/@namics/frontend-defaults-platform-test-fixtures/contributebuddy-project/.contributebuddy",
+  "contributebuddyInstallation": Object {
+    "declared": "^1.0.0",
+    "installed": "1.4.4",
+    "latest": Any<String>,
+    "location": "devDependencies",
+  },
+}
+`;

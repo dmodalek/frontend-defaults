@@ -1,0 +1,70 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Analyzers PrettierAnalyzer should analyze a project with config inside package.json correctly 1`] = `
+Object {
+  "prettier": true,
+  "prettierConfigLocation": "package",
+  "prettierIgnore": true,
+  "prettierInstallation": Object {
+    "declared": "1.1.0",
+    "installed": "1.16.4",
+    "latest": Any<String>,
+    "location": "devDependencies",
+  },
+  "prettierSettings": Object {
+    "printWidth": 120,
+    "useTabs": true,
+  },
+}
+`;
+
+exports[`Analyzers PrettierAnalyzer should analyze a project with installation correctly 1`] = `
+Object {
+  "prettier": true,
+  "prettierConfigLocation": "config",
+  "prettierIgnore": true,
+  "prettierInstallation": Object {
+    "declared": "1.1.0",
+    "installed": "1.16.4",
+    "latest": Any<String>,
+    "location": "devDependencies",
+  },
+  "prettierSettings": Object {},
+}
+`;
+
+exports[`Analyzers PrettierAnalyzer should analyze a project without ignore & installation correctly 1`] = `
+Object {
+  "prettier": true,
+  "prettierConfigLocation": "config",
+  "prettierIgnore": false,
+  "prettierInstallation": Object {
+    "declared": "1.1.0",
+    "installed": "1.16.4",
+    "latest": Any<String>,
+    "location": "devDependencies",
+  },
+  "prettierSettings": Object {},
+}
+`;
+
+exports[`Analyzers PrettierAnalyzer should analyze a project without installation correctly 1`] = `
+Object {
+  "prettier": true,
+  "prettierConfigLocation": "config",
+  "prettierIgnore": true,
+  "prettierInstallation": Object {
+    "declared": "1.1.0",
+    "installed": null,
+    "latest": Any<String>,
+    "location": "devDependencies",
+  },
+  "prettierSettings": Object {},
+}
+`;
+
+exports[`Analyzers PrettierAnalyzer should find no prettier if nothing related is installed 1`] = `
+Object {
+  "prettier": false,
+}
+`;

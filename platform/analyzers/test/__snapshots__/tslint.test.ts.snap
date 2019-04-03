@@ -5,7 +5,7 @@ Object {
   "tslint": true,
   "tslintInstallation": Object {
     "declared": "5.12.1",
-    "installed": null,
+    "installed": "5.15.0",
     "latest": Any<String>,
     "location": "devDependencies",
   },

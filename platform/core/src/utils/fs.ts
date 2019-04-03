@@ -3,8 +3,9 @@ import {
 	access,
 	appendFile,
 	readFile,
-	writeFile
-	} from 'fs';
+	writeFile,
+	stat
+} from 'fs';
 import globby from 'globby';
 
 export async function getFileContents(path: string): Promise<string> {
@@ -128,6 +129,14 @@ export async function fileExists(path: string): Promise<boolean> {
 	return new Promise<boolean>((resolve) => {
 		access(path, F_OK, (err) => (err ? resolve(false) : resolve(true)));
 	});
+}
+
+export async function directoryExists(path: string): Promise<boolean> {
+	return new Promise<boolean>((resolve) => {
+		access(path, (err) => {
+			resolve((err && err.code === 'ENOENT') ? false : true)
+		});
+	})
 }
 
 export async function findFilesByPattern(cwd: string = process.cwd(), pattern: string | string[]): Promise<string[]> {

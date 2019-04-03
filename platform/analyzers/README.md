@@ -28,18 +28,19 @@ import { editorConfigAnalyzer, webpackAnalyzer, licenseAnalyzer } from '@namics/
 |------------------------|-------------|------------------------------|
 | [BentoAnalyzer](src/#) | :x: | How can we determine a bento repo? |
 | [CommitlintAnalyzer](src/#) | :x: | How should we determine the installation |
-| [ContributeBuddyAnalyzer](src/#) | :x: | Talk back with author |
+| [ContributeBuddyAnalyzer](src/contributebuddy.ts) | :white_check_mark: | - |
 | [ConventionalChangelogAnalyzer](src/#) | :x: | - |
 | [EditorconfigAnalyzer](src/editorconfig.ts) | :white_check_mark: | - |
 | [ESLintAnalyzer](src/eslint.ts) | :white_check_mark: | - |
-| [GitAttributesAnalyzer](src/#) | :x: | Really needed? |
+| [GitAttributesAnalyzer](src/#) | :x: | Really needed? I think we don't have a default config ... |
 | [GitHooksAnalyzer](src/githooks.ts) | :white_check_mark: | - |
 | [GitIgnoreAnalyzer](src/gitignore.ts)  | :white_check_mark: | - |
 | [LicenseAnalyzer](src/license.ts) | :white_check_mark: | - |
 | [NitroAnalyzer](src/nitro.ts) | :white_check_mark: | - |
 | [NodeAnalyzer](src/node.ts) | :white_check_mark: | - |
 | [NPMRCAnalyzer](src/npmrc.ts) | :white_check_mark: | - |
-| [ReadmeAnalyzer](src/radme.ts) | :white_check_mark: | - |
+| [PrettierAnalyzer](src/prettier.ts) | :white_check_mark: | - |
+| [ReadmeAnalyzer](src/readme.ts) | :white_check_mark: | - |
 | [RepositoryAnalyzer](src/repository.ts) | :white_check_mark: | - |
 | [StylelintAnalyzer](src/stylelint.ts) | :white_check_mark: | - |
 | [TSLintAnalyzer](src/tslint.ts) | :white_check_mark: | - |

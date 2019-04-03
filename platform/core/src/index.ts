@@ -9,6 +9,7 @@ export {
     getJSON,
     mergeJSON,
     fileExists,
+    directoryExists,
     findFilesByPattern,
     displayPath,
 } from './utils/fs';

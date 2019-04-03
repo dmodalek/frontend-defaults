@@ -1,0 +1,12 @@
+{
+  "name": "fixture-default-project",
+  "version": "0.0.1",
+  "private": false,
+  "devDependencies": {
+    "prettier": "1.1.0"
+  },
+  "prettier": {
+    "useTabs": true,
+    "printWidth": 120
+  }
+}
