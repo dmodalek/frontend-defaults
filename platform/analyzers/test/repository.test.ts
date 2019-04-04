@@ -38,6 +38,7 @@ describe('Analyzers', () => {
                 latest: expect.any(String) // don't save latest version in snapshot
             });
             expect(analytics.lernaProjectInformation).toMatchSnapshot();
+            expect(analytics.size).toMatchSnapshot();
         });
 
         it('should analyze a lerna project without installation correctly', async () => {
@@ -61,6 +62,7 @@ describe('Analyzers', () => {
                 latest: expect.any(String) // don't save latest version in snapshot
             });
             expect(analytics.nxProjectInformation).toMatchSnapshot();
+            expect(analytics.size).toMatchSnapshot();
         });
 
         it('should analyze a nrwl/nx project without installation correctly', async () => {

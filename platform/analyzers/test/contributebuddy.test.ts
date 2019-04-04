@@ -26,11 +26,6 @@ describe('Analyzers', () => {
             const analytics = await contributebuddyAnalyzer(FIXTURE_NONE);
 
             expect(analytics.contributebuddy).toEqual(false);
-            expect(analytics).toMatchSnapshot({
-                contributebuddyInstallation: {
-                    latest: expect.any(String)
-                }
-            });
         });
     });
 });
