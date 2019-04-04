@@ -7,7 +7,7 @@ export enum NodeAnalyzerManagerType {
 }
 
 type NodeAnalyzerManagerInfoType = {
-	[managerType in NodeAnalyzerManagerType]: string | boolean;
+	[managerType in NodeAnalyzerManagerType]: string | false;
 }
 
 export type NodeAnalyzerResult = {
@@ -17,8 +17,8 @@ export type NodeAnalyzerResult = {
 
 async function getLocalVersionFile(cwd: string): Promise<{ exist: boolean, managers: NodeAnalyzerManagerInfoType }> {
 	const allManagers: NodeAnalyzerManagerInfoType = {
-		[NodeAnalyzerManagerType["node-version"]]: false,
-		[NodeAnalyzerManagerType.nvm]: false,
+		[NodeAnalyzerManagerType["node-version"]]: false as false,
+		[NodeAnalyzerManagerType.nvm]: false as false,
 	};
 	const nodeVersionFileExists = await fileExists(join(cwd, '.node-version'));
 	const nvmrcFileExists = await fileExists(join(cwd, '.nvmrc'));
