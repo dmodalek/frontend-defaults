@@ -42,6 +42,10 @@
   "dependencies": {
     "@namics/frontend-defaults-platform-core": "0.1.0",
     "@namics/frontend-defaults-platform-analyzers": "0.1.0",
-    "@namics/frontend-defaults-platform-test-fixtures": "1.0.0"
+    "@namics/frontend-defaults-platform-test-fixtures": "1.0.0",
+    "@namics/prettier-config": "*",
+    "@namics/tslint-config": "*",
+    "@namics/stylelint-config": "*",
+    "@namics/ts-config": "*"
   }
 }

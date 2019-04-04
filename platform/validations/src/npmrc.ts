@@ -1,28 +1,30 @@
-import { NPMRCAnalyzerResult } from '@namics/frontend-defaults-platform-analyzers';
 import { ValidationResult, ValidationSeverityLevel } from '@namics/frontend-defaults-platform-core';
+import { NPMRCAnalyzerResult } from '@namics/frontend-defaults-platform-analyzers';
 
-export const npmrcValidation = async (cwd: string, analytics: NPMRCAnalyzerResult): Promise<ValidationResult[]> => {
-    const validationResults: ValidationResult[] = [];
+export type NPMRCAnalyzerResult = {
+	npmrc: boolean;
+	npmrcSaveExactEnabled?: boolean;
+};
 
-    if (!analytics.npmrc) {
-        // No .npmrc file found
-        validationResults.push({
-            message: `No .npmrc file found to reference to the correct node version`,
-            source: 'NPMRCValidation',
-            patch: [['NPMRCPatch', { create: true }]],
-            level: ValidationSeverityLevel.error,
-        });
-    }
+export const npmrcAnalyzer = async (cwd: string, anayltics: NPMRCAnalyzerResult): Promise<ValidationResult[]> => {
+	if (anayltics.npmrc) {
+		if (!anayltics.npmrcSaveExactEnabled) {
+			return [{
+				level: ValidationSeverityLevel.error,
+				message: `Field "save-exact=true" is required in the .npmrc file`,
+				source: 'npmrcAnalyzer',
+				url: 'https://docs.npmjs.com/misc/config#save-exact'
+			}]
+		}
 
-    if (analytics.npmrc && !analytics.npmrcSaveExactEnabled) {
-        // .npmrc file found but save-exact not enabled
-        validationResults.push({
-            message: `Save exact is not enabled in your .npmrc file`,
-            source: 'NPMRCValidation',
-            patch: ['NPMRCPatch'],
-            level: ValidationSeverityLevel.warning,
-        });
-    }
-
-    return validationResults;
+		// .npmrc present, save-exact enabled = no issues!
+		return [];
+	} else {
+		return [{
+			level: ValidationSeverityLevel.error,
+			message: `NPM configuration missing`,
+			source: 'npmrcAnalyzer',
+			url: 'https://docs.npmjs.com/misc/config#npmrc-files'
+		}]
+	}
 }

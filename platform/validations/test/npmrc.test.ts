@@ -1,5 +1,5 @@
 import { checkInternetConnection, getFixtureDir } from './utils';
-import { npmrcValidation } from '../src/npmrc';
+import { npmrcValidation } from '../../patches/src/npmrc';
 import { npmrcAnalyzer, NPMRCAnalyzerResult } from '@namics/frontend-defaults-platform-analyzers';
 import { analyze } from '@namics/frontend-defaults-platform-core';
 

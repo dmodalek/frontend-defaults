@@ -1,82 +1,53 @@
 import { NodeAnalyzerResult } from '@namics/frontend-defaults-platform-analyzers';
-import {
-    checkNewerLTSVersion,
-    ValidationException,
-    ValidationResult,
-    ValidationSeverityLevel
-    } from '@namics/frontend-defaults-platform-core';
+import { ValidationResult, ValidationSeverityLevel } from '@namics/frontend-defaults-platform-core';
+import { versionSatisfaction } from '@namics/frontend-defaults-platform-core/dist/utils/version';
+
+const CURRENT_NODE_LTS = '10.x';
 
 export const nodeValidation = async (cwd: string, analytics: NodeAnalyzerResult): Promise<ValidationResult[]> => {
-    const { nodeVersion, nodeVersionManagerInfo } = analytics;
+	const validations: ValidationResult[] = [];
 
-    if (!nodeVersion || !nodeVersionManagerInfo) {
-        return [
-            {
-                message: `No node version manager used, integrate node-version or/and nvm`,
-                level: ValidationSeverityLevel.error,
-                source: 'NodeValidation',
-                patch: ['NVMInstallPatch', 'NodeVersionInstallPatch']
-            }
-        ];
-    }
+	if (analytics.nodeVersionManagerInfo) {
+		// NVM is used, do validation stuff
+		if (analytics.nodeVersionManagerInfo.nvm) {
+			// .nvmrc file isn't required anymore because it can also read .node-version
+			validations.push({
+				level: ValidationSeverityLevel.info,
+				message: `The .nvmrc file isn't required anymore, because it can also read .node-version files`,
+				source: 'licenseValidation'
+			})
 
-    const validations: ValidationResult[] = [];
+			// Check for update in the .nvmrc file
+			const definedNVMVersion = analytics.nodeVersionManagerInfo.nvm;
+			if (!versionSatisfaction(definedNVMVersion, CURRENT_NODE_LTS)) {
+				validations.push({
+					level: ValidationSeverityLevel.warning,
+					message: `Your .nvmrc version is set to ${definedNVMVersion}, Namics uses ${CURRENT_NODE_LTS}`,
+					source: 'licenseValidation'
+				})
+			}
+		} else {
+			// FIXME: NVM is not required by namics, because NVM will also read the .node-version file
+		}
 
-    if (!nodeVersionManagerInfo.nvm) {
-        // no .nvmrc file found
-        validations.push({
-            message: `No .nvmrc ressource file found, you might add one`,
-            source: 'NodeValidation',
-            level: ValidationSeverityLevel.info,
-            patch: ['NVMInstallPatch']
-        });
-    } else if (typeof nodeVersionManagerInfo.nvm === 'string') {
-        // check for lts updates in .nvmrc
-        const nvmUpgradeException = await checkManagerForUpdate(nodeVersionManagerInfo.nvm, 'nvm', 'UpdateNVMPatch');
-        if (nvmUpgradeException) {
-            validations.push(nvmUpgradeException);
-        }
-    }
+		// NodeVersion is used, do validatio nstuff
+		if (analytics.nodeVersionManagerInfo['node-version']) {
+			const definedNodeVersion = analytics.nodeVersionManagerInfo['node-version'];
+			if (!versionSatisfaction(definedNodeVersion, CURRENT_NODE_LTS)) {
+				validations.push({
+					level: ValidationSeverityLevel.warning,
+					message: `Your .node-version version is set to ${definedNodeVersion}, Namics uses ${CURRENT_NODE_LTS}`,
+					source: 'licenseValidation'
+				})
+			}
+		} else {
+			validations.push({
+				level: ValidationSeverityLevel.error,
+				message: `We require to provide a .node-version file for version managers`,
+				source: 'nodeValidation'
+			})
+		}
+	}
 
-    if (!nodeVersionManagerInfo['node-version']) {
-        // no .node-version file found
-        validations.push({
-            message: `No .node-version ressource file found, you might add one`,
-            source: 'NodeValidation',
-            level: ValidationSeverityLevel.warning,
-            patch: ['NodeVersionInstallPatch']
-        });
-    } else if (typeof nodeVersionManagerInfo["node-version"] === 'string') {
-        // check for lts updates in .node-version
-        const nodeVersionUpgradeException = await checkManagerForUpdate(nodeVersionManagerInfo["node-version"], 'node-version', 'UpdateNodeVersionPatch');
-        if (nodeVersionUpgradeException) {
-            validations.push(nodeVersionUpgradeException);
-        }
-    }
-
-    return validations;
-}
-
-/**
- * Check if there's an LTS update for a certain manager
- * @param selectedVersion current node version from file
- * @param config configuration type (nvm or node-version)
- * @param patch patch needed if upgrade available
- */
-const checkManagerForUpdate = async (selectedVersion: string, config: string, patch: string): Promise<ValidationResult | void> => {
-    const checkForUpdate = await checkNewerLTSVersion('node', selectedVersion);
-
-    if (checkForUpdate.upgradable) {
-        return {
-            message: `There's a newer node LTS version available for ${config}, try upgrading`,
-            source: 'NodeValidation',
-            level: ValidationSeverityLevel.info,
-            patch: [
-                [patch, {
-                    current: checkForUpdate.current,
-                    latest: checkForUpdate.latest
-                }]
-            ]
-        }
-    }
+	return validations;
 }
