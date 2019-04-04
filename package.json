@@ -23,7 +23,7 @@
     "build:vendors": "lerna run build --scope @namics/frontend-defaults-platform-* --ignore @namics/frontend-defaults-platform-core",
     "bootstrap": "lerna bootstrap",
     "postinstall": "npm run bootstrap",
-    "prettier": "prettier --write \"**/*.*(js|jsx|ts|tsx|json)\" \"!cli/templates/**\"",
+    "prettier": "prettier --write \"**/*.*(js|jsx|ts|tsx|json)\" \"!cli/templates/**\" \"!__snapshots__\" \"!./platform/templates/**/*\"",
     "test": "lerna run test"
   },
   "husky": {
