@@ -1,32 +1,45 @@
 // utility and core types
 export { Constructable } from './types/Constructable';
 export { IPackage } from './types/Package';
-export { ValidationSeverityLevel, ValidationResult } from './utils/validation';
+
+// validation stuff
+export {
+	ValidationSeverityLevel,
+	ValidationResult,
+	validate,
+	validateInstallation,
+	validateConfigPresetJSON
+} from './validations';
+
+// action stuff for patches
+export { runActions } from './actions';
 
 // filesystem utilities
 export {
-    getFileContents,
-    getJSON,
-    mergeJSON,
-    fileExists,
-    directoryExists,
-    findFilesByPattern,
-    displayPath,
+	getFileContents,
+	getJSON,
+	getStats,
+	mergeJSON,
+	fileExists,
+	directoryExists,
+	findFilesByPattern,
+	displayPath,
 } from './utils/fs';
 
 // version utilities
 export {
-    DependencyInstallation,
-    getDependencyInstallation,
-    getInstalledDependencyVersion,
-    checkDependencyUpdate,
-    getLatestLTSVersion,
-    checkNewerLTSVersion,
+	DependencyInstallation,
+	getDependencyInstallation,
+	getInstalledDependencyVersion,
+	checkDependencyUpdate,
+	dependencyIsOutdated,
+	getLatestLTSVersion,
+	checkNewerLTSVersion,
 } from './utils/version';
 
 // package utilities
 export {
-    getPackageJSON
+	getPackageJSON
 } from './utils/package';
 
 // templating utilities

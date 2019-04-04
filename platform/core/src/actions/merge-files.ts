@@ -1,46 +1,34 @@
 import { getFileContents } from '../utils/fs';
 import { appendFile } from 'fs';
-
-type MergeFilesResult = {
-    base: string;
-    overrides: string;
-    merged: string;
-};
+import { IRawFileSystemChangeAction } from './abstract';
 
 /**
  * Merge any two files into the base and returns information about the merge
- * @param baseSourcePath path to the main file
- * @param mergableSourcePath path to the file to merge
- * @param dry if this should be a dry run
+ * @param {string} baseSourcePath path to the main file
+ * @param {string} mergableSourcePath path to the file to merge
+ * @author jbiasi
  */
 export async function mergeFiles(
     baseSourcePath: string,
     mergableSourcePath: string,
-    dry: boolean = false
-): Promise<MergeFilesResult> {
+): Promise<IRawFileSystemChangeAction> {
     try {
         const baseContents = await getFileContents(baseSourcePath);
         const mergableContents = await getFileContents(mergableSourcePath);
         const theoreticalMerge = [baseContents, mergableContents].join('\n');
 
-        return await new Promise<MergeFilesResult>((resolve, reject) => {
-            if (dry) {
-                // return theoretical merge content
-                return resolve({
-                    merged: theoreticalMerge,
-                    base: baseContents,
-                    overrides: mergableContents,
-                });
-            }
-
-            appendFile(baseSourcePath, mergableContents, (err) => {
-                err
-                    ? reject(err)
-                    : resolve({
-                        merged: theoreticalMerge,
-                        base: baseContents,
-                        overrides: mergableContents,
+        return await new Promise<IRawFileSystemChangeAction>((resolve) => {
+            return resolve({
+                merged: theoreticalMerge,
+                base: baseContents,
+                overrides: mergableContents,
+                exec() {
+                    return new Promise<boolean>((resolve) => {
+                        appendFile(baseSourcePath, theoreticalMerge, err => {
+                            resolve(err ? false : true);
+                        });
                     });
+                }
             });
         });
     } catch (err) {
