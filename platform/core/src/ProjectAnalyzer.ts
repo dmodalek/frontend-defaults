@@ -14,7 +14,7 @@ type ProjectAnalyzerConstructionOptions = {
 export interface IProjectAnalyzer<Analytics> {
 	context: IContext;
 	analytics: Analytics;
-	initialAnalyzationDone: boolean
+	initialAnalyzationDone: boolean;
 }
 
 /**
@@ -83,7 +83,7 @@ export class ProjectAnalyzer<Analytics extends Object = {}> implements IProjectA
 	private get analyzerBaseConfiguration(): AnalyzerConfiguration {
 		return {
 			context: this.context,
-			analytics: this.analytics
+			analytics: this.analytics,
 		};
 	}
 }

@@ -45,4 +45,3 @@ export { typescriptAnalyzer, TypeScriptAnalyzerResult } from './typescript';
 
 // export all related analyzer stuff for webpack
 export { webpackAnalyzer, WebpackAnalyzerResult } from './webpack';
-

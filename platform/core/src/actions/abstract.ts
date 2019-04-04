@@ -1,14 +1,14 @@
 export interface IAction<T extends boolean = boolean> {
-	exec: () => Promise<T>
+	exec: () => Promise<T>;
 }
 
 export interface IShellAction extends IAction {
-	commands: string[]
+	commands: string[];
 }
 
 export interface IRawFileSystemCreateAction extends IAction {
-	target: string,
-	content: string
+	target: string;
+	content: string;
 }
 
 export interface IRawFileSystemChangeAction extends IAction {

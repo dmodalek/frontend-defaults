@@ -4,7 +4,7 @@ import { join } from 'path';
 export type ESLintAnalyzerResult = {
 	eslint: boolean;
 	eslintIgnore?: boolean;
-	eslintInstallation?: DependencyInstallation
+	eslintInstallation?: DependencyInstallation;
 };
 
 export const eslintAnalyzer = async (cwd: string): Promise<ESLintAnalyzerResult> => {
@@ -17,11 +17,11 @@ export const eslintAnalyzer = async (cwd: string): Promise<ESLintAnalyzerResult>
 		return {
 			eslint: doesESLintExist,
 			eslintIgnore: doesESLintIgnoreExist,
-			eslintInstallation
+			eslintInstallation,
 		};
 	}
 
 	return {
 		eslint: doesESLintExist,
 	};
-}
+};

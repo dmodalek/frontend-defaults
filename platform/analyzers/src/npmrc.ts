@@ -23,4 +23,4 @@ export const npmrcAnalyzer = async (cwd: string): Promise<NPMRCAnalyzerResult> =
 	return {
 		npmrc: npmrcExists,
 	};
-}
+};

@@ -12,4 +12,4 @@ export const licenseAnalyzer = async (cwd: string): Promise<LicenseAnalyzerResul
 	return {
 		license: licenseExists,
 	};
-}
+};

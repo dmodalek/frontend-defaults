@@ -7,9 +7,11 @@ export const readmeValidation = async (cwd: string, analytics: ReadmeAnalyzerRes
 		return [];
 	}
 
-	return [{
-		level: ValidationSeverityLevel.error,
-		message: 'You must create a readme file for your project',
-		source: 'readmeValidation'
-	}];
-}
+	return [
+		{
+			level: ValidationSeverityLevel.error,
+			message: 'You must create a readme file for your project',
+			source: 'readmeValidation',
+		},
+	];
+};

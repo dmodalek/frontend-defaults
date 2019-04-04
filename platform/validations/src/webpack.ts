@@ -1,10 +1,14 @@
 import { WebpackAnalyzerResult } from '@namics/frontend-defaults-platform-analyzers';
-import { ValidationResult, ValidationSeverityLevel, validateInstallation } from '@namics/frontend-defaults-platform-core';
+import {
+	ValidationResult,
+	ValidationSeverityLevel,
+	validateInstallation,
+} from '@namics/frontend-defaults-platform-core';
 
 const alternatePluginMap = [
 	['ts-loader', 'ts-config-webpack-plugin'],
 	['scss-loader', 'scss-config-webpack-plugin'],
-	['css-loader', 'scss-config-webpack-plugin']
+	['css-loader', 'scss-config-webpack-plugin'],
 ];
 
 export const webpackValidation = async (cwd: string, analytics: WebpackAnalyzerResult): Promise<ValidationResult[]> => {
@@ -15,7 +19,7 @@ export const webpackValidation = async (cwd: string, analytics: WebpackAnalyzerR
 			validateInstallation({
 				installation: analytics.webpackInstallation,
 				name: 'Webpack',
-				source: 'webpackValidation'
+				source: 'webpackValidation',
 			})
 		);
 
@@ -34,7 +38,7 @@ export const webpackValidation = async (cwd: string, analytics: WebpackAnalyzerR
 					level: ValidationSeverityLevel.info,
 					message: `Try use ${namicsPlugin} instead of ${communityPackage}`,
 					source: 'webpackValidation',
-					url: 'https://github.com/namics/webpack-config-plugins'
+					url: 'https://github.com/namics/webpack-config-plugins',
 				});
 			}
 		});
@@ -43,4 +47,4 @@ export const webpackValidation = async (cwd: string, analytics: WebpackAnalyzerR
 	}
 
 	return [];
-}
+};

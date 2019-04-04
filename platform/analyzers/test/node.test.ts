@@ -29,7 +29,7 @@ describe('Analyzers', () => {
 
 			expect(nodeVersion).toEqual(true);
 			expect(nodeVersionManagerInfo).toBeTruthy();
-			expect(nodeVersionManagerInfo!["node-version"]).toEqual('10.0.0');
+			expect(nodeVersionManagerInfo!['node-version']).toEqual('10.0.0');
 			expect(analytics).toMatchSnapshot();
 		});
 

@@ -5,9 +5,9 @@ import { Constructable } from './types/Constructable';
 import { ValidationException } from './Validation';
 
 type ProjectPatch = {
-	patch: Constructable<IPatch<any>>,
-	arguments: any
-}
+	patch: Constructable<IPatch<any>>;
+	arguments: any;
+};
 
 type ProjectPatcherOptions = {
 	patches: ProjectPatch[];
@@ -49,29 +49,34 @@ export class ProjectPatcher implements IProjectPatcher {
 	 */
 	private async runPatches(patches: ProjectPatch[]): Promise<PatchResult[]> {
 		return patches
-			.map((projectPatch: ProjectPatch): { instance: IPatch<any>, arguments: any } => {
-				return {
-					// patch instance
-					instance: new projectPatch.patch({
-						context: this.context
-					}),
-					// arguments for the patch method itself
-					arguments: projectPatch.arguments
+			.map(
+				(projectPatch: ProjectPatch): { instance: IPatch<any>; arguments: any } => {
+					return {
+						// patch instance
+						instance: new projectPatch.patch({
+							context: this.context,
+						}),
+						// arguments for the patch method itself
+						arguments: projectPatch.arguments,
+					};
 				}
-			})
+			)
 			.reduce(async (prev, currentPatcher) => {
 				return [
 					// previous patch results
-					...await prev,
+					...(await prev),
 					// current patch results
-					...await currentPatcher.instance.validate().patch(currentPatcher.arguments)
+					...(await currentPatcher.instance.validate().patch(currentPatcher.arguments)),
 				];
 			}, Promise.resolve([]));
 	}
 }
 
-export function buildSinglePatch<GenericPatch extends ConstructablePatch<Options>, Options>(context: IContext, PatchBlueprint: GenericPatch) {
+export function buildSinglePatch<GenericPatch extends ConstructablePatch<Options>, Options>(
+	context: IContext,
+	PatchBlueprint: GenericPatch
+) {
 	return new PatchBlueprint({
-		context
+		context,
 	});
-};
+}

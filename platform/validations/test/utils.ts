@@ -3,14 +3,14 @@ import { lookup } from 'dns';
 import latestVersion = require('latest-version');
 
 export function checkInternetConnection(): Promise<boolean> {
-	return new Promise(resolve => {
+	return new Promise((resolve) => {
 		lookup('google.com', (err: NodeJS.ErrnoException) => {
 			if (err && err.code == 'ENOTFOUND') {
 				resolve(false);
 			} else {
-				resolve(true)
+				resolve(true);
 			}
-		})
+		});
 	});
 }
 
@@ -19,7 +19,12 @@ export function getFixtureDir(fixture: string): string {
 }
 
 export async function getLatestVersion(dep: string, lts: boolean = false) {
-	return await latestVersion(dep, lts ? {
-		version: 'lts'
-	} : undefined);
+	return await latestVersion(
+		dep,
+		lts
+			? {
+					version: 'lts',
+			  }
+			: undefined
+	);
 }

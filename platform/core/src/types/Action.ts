@@ -1,1 +1,1 @@
-export type Action<R> = () => Promise<R>
+export type Action<R> = () => Promise<R>;

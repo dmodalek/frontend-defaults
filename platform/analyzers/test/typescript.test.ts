@@ -18,8 +18,8 @@ describe('Analyzers', () => {
 			expect(analytics.typescriptInstallation!.installed).toEqual('3.0.0');
 			expect(analytics).toMatchSnapshot({
 				typescriptInstallation: {
-					"latest": expect.any(String)
-				}
+					latest: expect.any(String),
+				},
 			});
 		});
 
@@ -30,8 +30,8 @@ describe('Analyzers', () => {
 			expect(analytics.typescriptInstallation!.installed).toBeFalsy();
 			expect(analytics).toMatchSnapshot({
 				typescriptInstallation: {
-					"latest": expect.any(String)
-				}
+					latest: expect.any(String),
+				},
 			});
 		});
 	});

@@ -10,26 +10,26 @@ export interface IPatch<A> {
 }
 
 export type ConstructablePatch<A> = {
-	new({ context }: PatchConstructorOptions): IPatch<A>;
-}
+	new ({ context }: PatchConstructorOptions): IPatch<A>;
+};
 
 type PatchConstructorOptions = {
-	context: IContext
-}
+	context: IContext;
+};
 
 export interface IBasePatchResult {
-	error?: Error
+	error?: Error;
 }
 
 export interface IFilePatchResult extends IBasePatchResult {
-	affectedFile: string,
-	before?: string,
-	after?: string
+	affectedFile: string;
+	before?: string;
+	after?: string;
 }
 
 export interface IShellPatchResult extends IBasePatchResult {
-	command: string,
-	output: string
+	command: string;
+	output: string;
 }
 
 export type PatchResult = IFilePatchResult | IShellPatchResult;
@@ -89,7 +89,7 @@ export abstract class Patch<A extends any = void> implements IPatch<A> {
 	 * Dry run implementation logic belongs here, you should not use any
 	 * writeFile, shell execution command in here, just return what the
 	 * command will do or will change theoretically.
-	 * @param options 
+	 * @param options
 	 */
 	abstract async dry(options?: A): Promise<PatchResult[]>;
 }

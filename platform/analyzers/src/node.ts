@@ -3,28 +3,26 @@ import { join } from 'path';
 
 export enum NodeAnalyzerManagerType {
 	'nvm' = 'nvm',
-	'node-version' = 'node-version'
+	'node-version' = 'node-version',
 }
 
-type NodeAnalyzerManagerInfoType = {
-	[managerType in NodeAnalyzerManagerType]: string | false;
-}
+type NodeAnalyzerManagerInfoType = { [managerType in NodeAnalyzerManagerType]: string | false };
 
 export type NodeAnalyzerResult = {
 	nodeVersion: boolean;
 	nodeVersionManagerInfo?: NodeAnalyzerManagerInfoType;
 };
 
-async function getLocalVersionFile(cwd: string): Promise<{ exist: boolean, managers: NodeAnalyzerManagerInfoType }> {
+async function getLocalVersionFile(cwd: string): Promise<{ exist: boolean; managers: NodeAnalyzerManagerInfoType }> {
 	const allManagers: NodeAnalyzerManagerInfoType = {
-		[NodeAnalyzerManagerType["node-version"]]: false as false,
+		[NodeAnalyzerManagerType['node-version']]: false as false,
 		[NodeAnalyzerManagerType.nvm]: false as false,
 	};
 	const nodeVersionFileExists = await fileExists(join(cwd, '.node-version'));
 	const nvmrcFileExists = await fileExists(join(cwd, '.nvmrc'));
 
 	if (nodeVersionFileExists) {
-		allManagers["node-version"] = await extractVersionFromFile(join(cwd, '.node-version'));
+		allManagers['node-version'] = await extractVersionFromFile(join(cwd, '.node-version'));
 	}
 
 	if (nvmrcFileExists) {
@@ -33,13 +31,14 @@ async function getLocalVersionFile(cwd: string): Promise<{ exist: boolean, manag
 
 	return {
 		exist: nvmrcFileExists || nodeVersionFileExists,
-		managers: allManagers
+		managers: allManagers,
 	};
 }
 
 async function extractVersionFromFile(filePath: string) {
-	const contents = await getFileContents(filePath)
-	return contents.replace(/\r?\n|\r/g, '')
+	const contents = await getFileContents(filePath);
+	return contents
+		.replace(/\r?\n|\r/g, '')
 		.replace('^', '')
 		.replace('~', '')
 		.replace('>', '')
@@ -61,4 +60,4 @@ export const nodeAnalyzer = async (cwd: string): Promise<NodeAnalyzerResult> => 
 	return {
 		nodeVersion: false,
 	};
-}
+};

@@ -10,7 +10,7 @@ import { IJSONFileSystemAction } from './abstract';
  */
 export async function mergeJSON<Result extends Object>(
 	baseSourcePath: string,
-	mergableSourcePath: string,
+	mergableSourcePath: string
 ): Promise<IJSONFileSystemAction<Result>> {
 	try {
 		const baseContents = await getJSON<Partial<Result>>(baseSourcePath);
@@ -29,7 +29,7 @@ export async function mergeJSON<Result extends Object>(
 							resolve(err ? false : true);
 						});
 					});
-				}
+				},
 			});
 		});
 	} catch (err) {

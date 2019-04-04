@@ -4,8 +4,8 @@ import {
 	tslintAnalyzer,
 	TSLintAnalyzerResult,
 	typescriptAnalyzer,
-	TypeScriptAnalyzerResult
-	} from '@namics/frontend-defaults-platform-analyzers';
+	TypeScriptAnalyzerResult,
+} from '@namics/frontend-defaults-platform-analyzers';
 import { analyze, ValidationExceptionLevel } from '@namics/frontend-defaults-platform-core';
 
 const generateAnalyticsFor = async (

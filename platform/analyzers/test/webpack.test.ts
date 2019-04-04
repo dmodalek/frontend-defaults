@@ -19,8 +19,8 @@ describe('Analyzers', () => {
 			expect(analytics.webpackInstallation!.installed).toBeFalsy(); // FIXME: not mocked yet
 			expect(analytics).toMatchSnapshot({
 				webpackInstallation: {
-					"latest": expect.any(String)
-				}
+					latest: expect.any(String),
+				},
 			});
 		});
 
@@ -33,8 +33,8 @@ describe('Analyzers', () => {
 			expect(analytics.webpackInstalledDependencies).toHaveLength(3);
 			expect(analytics).toMatchSnapshot({
 				webpackInstallation: {
-					"latest": expect.any(String)
-				}
+					latest: expect.any(String),
+				},
 			});
 		});
 	});

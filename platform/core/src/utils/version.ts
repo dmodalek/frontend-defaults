@@ -7,17 +7,17 @@ import semver from 'semver';
 
 export type DependencyInstallation = {
 	location: 'devDependencies' | 'dependencies' | null;
-	declared: string | null,
-	installed: string | null,
-	latest: string | null
+	declared: string | null;
+	installed: string | null;
+	latest: string | null;
 };
 
 export async function getDependencyInstallation(cwd: string, dependency: string): Promise<DependencyInstallation> {
-	const installed = await getInstalledDependencyVersion(cwd, dependency) || null;
+	const installed = (await getInstalledDependencyVersion(cwd, dependency)) || null;
 	const pkg = await getPackageJSON(cwd);
 	const declared = {
 		dev: pkg.devDependencies![dependency],
-		prod: pkg.dependencies![dependency]
+		prod: pkg.dependencies![dependency],
 	};
 	const latest = await latestVersion(dependency);
 
@@ -29,12 +29,13 @@ export async function getDependencyInstallation(cwd: string, dependency: string)
 	};
 }
 
-export async function getInstalledDependencyVersion(cwd: string = process.cwd(), dependency: string): Promise<string | undefined> {
+export async function getInstalledDependencyVersion(
+	cwd: string = process.cwd(),
+	dependency: string
+): Promise<string | undefined> {
 	try {
 		// TODO: should we use require.resolve instead of direct access
-		const installedPackage = await getJSON<IPackage>(
-			join(cwd, 'node_modules', dependency, 'package.json')
-		);
+		const installedPackage = await getJSON<IPackage>(join(cwd, 'node_modules', dependency, 'package.json'));
 		return installedPackage.version;
 	} catch (err) {
 		return undefined;
@@ -84,7 +85,7 @@ export function versionSatisfaction(current: string, needToSatisfy: string) {
 
 export async function getLatestLTSVersion(dependency: string): Promise<string> {
 	return await latestVersion(dependency, {
-		version: 'lts'
+		version: 'lts',
 	});
 }
 
@@ -101,6 +102,6 @@ export async function checkNewerLTSVersion(
 	return {
 		current: currentVersion,
 		latest,
-		upgradable: semver.lt(currentVersion, latest)
-	}
+		upgradable: semver.lt(currentVersion, latest),
+	};
 }

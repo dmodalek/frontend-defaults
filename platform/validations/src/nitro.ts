@@ -8,7 +8,7 @@ export const nitroValidation = async (cwd: string, analytics: NitroAnalyzerResul
 			validateInstallation({
 				installation: analytics.nitroInstallation,
 				name: 'Nitro',
-				source: 'nitroValidation'
+				source: 'nitroValidation',
 			})
 		);
 
@@ -19,4 +19,4 @@ export const nitroValidation = async (cwd: string, analytics: NitroAnalyzerResul
 
 	// no nitro used, do nothing
 	return [];
-}
+};

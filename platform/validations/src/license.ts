@@ -7,9 +7,11 @@ export const licenseValidation = async (cwd: string, analytics: LicenseAnalyzerR
 		return [];
 	}
 
-	return [{
-		level: ValidationSeverityLevel.warning,
-		message: 'You don\'t have a license file in your project',
-		source: 'licenseValidation'
-	}];
-}
+	return [
+		{
+			level: ValidationSeverityLevel.warning,
+			message: "You don't have a license file in your project",
+			source: 'licenseValidation',
+		},
+	];
+};

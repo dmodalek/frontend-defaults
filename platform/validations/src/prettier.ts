@@ -1,17 +1,26 @@
-import { ValidationResult, ValidationSeverityLevel, validateConfigPresetJSON } from '@namics/frontend-defaults-platform-core';
+import {
+	ValidationResult,
+	ValidationSeverityLevel,
+	validateConfigPresetJSON,
+} from '@namics/frontend-defaults-platform-core';
 import { PrettierAnalyzerResult } from '@namics/frontend-defaults-platform-analyzers';
 import prettierNamicsDefaults from '@namics/prettier-config/index.js';
 
-export const prettierValidation = async (cwd: string, anayltics: PrettierAnalyzerResult): Promise<ValidationResult[]> => {
+export const prettierValidation = async (
+	cwd: string,
+	anayltics: PrettierAnalyzerResult
+): Promise<ValidationResult[]> => {
 	const validations: ValidationResult[] = [];
 
 	if (!anayltics.prettier) {
-		return [{
-			level: ValidationSeverityLevel.error,
-			message: 'Prettier is missing',
-			url: 'https://prettier.io',
-			source: 'prettierValidation'
-		}];
+		return [
+			{
+				level: ValidationSeverityLevel.error,
+				message: 'Prettier is missing',
+				url: 'https://prettier.io',
+				source: 'prettierValidation',
+			},
+		];
 	}
 
 	if (anayltics.prettierConfigLocation === 'package') {
@@ -19,7 +28,7 @@ export const prettierValidation = async (cwd: string, anayltics: PrettierAnalyze
 			level: ValidationSeverityLevel.warning,
 			message: 'Prettier configuration should be in its own .prettierrc.js file',
 			url: 'https://prettier.io/docs/en/configuration.html',
-			source: 'prettierValidation'
+			source: 'prettierValidation',
 		});
 	}
 
@@ -39,9 +48,9 @@ export const prettierValidation = async (cwd: string, anayltics: PrettierAnalyze
 				'bracketSpacing',
 				'jsxBracketSameLine',
 				'arrowParens',
-			]
+			],
 		})
-	)
+	);
 
 	return validations;
-}
+};

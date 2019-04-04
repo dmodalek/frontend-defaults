@@ -7,6 +7,6 @@ export type EditorconfigAnalyzerResult = {
 
 export const editorConfigAnalyzer = async (cwd: string): Promise<EditorconfigAnalyzerResult> => {
 	return {
-		editorConfig: await fileExists(join(cwd, '.editorconfig'))
-	}
-}
+		editorConfig: await fileExists(join(cwd, '.editorconfig')),
+	};
+};

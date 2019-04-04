@@ -28,6 +28,7 @@
     "prepublishOnly": "npm-run-all test build"
   },
   "devDependencies": {
+    "@namics/frontend-defaults-platform-analyzers": "*",
     "@namics/ts-config": "*",
     "@types/jest": "23.3.11",
     "@types/node": "10.12.5",
@@ -36,6 +37,9 @@
     "typescript": "3.1.6",
     "npm-run-all": "4.1.5",
     "rimraf": "2.6.3"
+  },
+  "peerDependencies": {
+    "@namics/frontend-defaults-platform-analyzers": "*"
   },
   "dependencies": {
     "@namics/frontend-defaults-platform-core": "0.1.0",

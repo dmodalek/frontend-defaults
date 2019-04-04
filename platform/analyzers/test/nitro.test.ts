@@ -20,8 +20,8 @@ describe('Analyzers', () => {
 			expect(analytics.nitroInstallation!.installed).toBeFalsy(); // FIXME: not mocked yet
 			expect(analytics).toMatchSnapshot({
 				nitroInstallation: {
-					"latest": expect.any(String)
-				}
+					latest: expect.any(String),
+				},
 			});
 		});
 
@@ -33,8 +33,8 @@ describe('Analyzers', () => {
 			expect(analytics.nitroInstallation!.installed).toBeFalsy();
 			expect(analytics).toMatchSnapshot({
 				nitroInstallation: {
-					"latest": expect.any(String)
-				}
+					latest: expect.any(String),
+				},
 			});
 		});
 
@@ -46,8 +46,8 @@ describe('Analyzers', () => {
 			expect(analytics.nitroInstallation!.declared).toEqual('4.3.2');
 			expect(analytics).toMatchSnapshot({
 				nitroInstallation: {
-					"latest": expect.any(String)
-				}
+					latest: expect.any(String),
+				},
 			});
 		});
 	});

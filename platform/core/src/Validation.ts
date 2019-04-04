@@ -10,14 +10,14 @@ export const enum ValidationExceptionLevel {
 type ValidationExceptionOptions = {
 	message: string;
 	source: string;
-	patches?: RequiredValidationPatch[],
+	patches?: RequiredValidationPatch[];
 	level: ValidationExceptionLevel;
 };
 
 export type RequiredValidationPatch = {
-	patch: string,
-	arguments?: any
-}
+	patch: string;
+	arguments?: any;
+};
 
 /**
  * Validation exception implementation, used for any kind of validation

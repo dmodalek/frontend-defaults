@@ -2,8 +2,8 @@ import {
 	DependencyInstallation,
 	findFilesByPattern,
 	getDependencyInstallation,
-	getPackageJSON
-	} from '@namics/frontend-defaults-platform-core';
+	getPackageJSON,
+} from '@namics/frontend-defaults-platform-core';
 
 export type WebpackAnalyzerResult = {
 	webpack: boolean;
@@ -33,4 +33,4 @@ export const webpackAnalyzer = async (cwd: string): Promise<WebpackAnalyzerResul
 	return {
 		webpack: possibleWebpackConfigs.length > 0,
 	};
-}
+};

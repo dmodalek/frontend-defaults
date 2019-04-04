@@ -1,5 +1,9 @@
 import { ESLintAnalyzerResult } from '@namics/frontend-defaults-platform-analyzers';
-import { ValidationResult, ValidationSeverityLevel, validateInstallation } from '@namics/frontend-defaults-platform-core';
+import {
+	ValidationResult,
+	ValidationSeverityLevel,
+	validateInstallation,
+} from '@namics/frontend-defaults-platform-core';
 
 /**
  * TODO: Should we check if a project is a TS project in advance? So we wouldn't need to run this validation atm.
@@ -13,7 +17,7 @@ export const eslintValidation = async (cwd: string, analytics: ESLintAnalyzerRes
 			validateInstallation({
 				installation: analytics.eslintInstallation,
 				name: 'ESLint',
-				source: 'eslintValidation'
+				source: 'eslintValidation',
 			})
 		);
 
@@ -21,16 +25,18 @@ export const eslintValidation = async (cwd: string, analytics: ESLintAnalyzerRes
 			validationResults.push({
 				level: ValidationSeverityLevel.warning,
 				message: 'No .eslintignore found',
-				source: 'eslintValidation'
-			})
+				source: 'eslintValidation',
+			});
 		}
 
 		return validationResults;
 	}
 
-	return [{
-		level: ValidationSeverityLevel.warning,
-		message: 'ESLint configuration missing',
-		source: 'eslintValidation'
-	}];
-}
+	return [
+		{
+			level: ValidationSeverityLevel.warning,
+			message: 'ESLint configuration missing',
+			source: 'eslintValidation',
+		},
+	];
+};

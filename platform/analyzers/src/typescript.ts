@@ -2,8 +2,8 @@ import {
 	Analyzer,
 	DependencyInstallation,
 	fileExists,
-	getDependencyInstallation
-	} from '@namics/frontend-defaults-platform-core';
+	getDependencyInstallation,
+} from '@namics/frontend-defaults-platform-core';
 import { join } from 'path';
 
 export type TypeScriptAnalyzerResult = {
@@ -19,11 +19,11 @@ export const typescriptAnalyzer = async (cwd: string): Promise<TypeScriptAnalyze
 
 		return {
 			typescript: doesTypeScriptExist,
-			typescriptInstallation
+			typescriptInstallation,
 		};
 	}
 
 	return {
 		typescript: doesTypeScriptExist,
 	};
-}
+};

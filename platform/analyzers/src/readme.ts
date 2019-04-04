@@ -11,4 +11,4 @@ export const readmeAnalyzer = async (cwd: string): Promise<ReadmeAnalyzerResult>
 	return {
 		readme: readmeExists,
 	};
-}
+};

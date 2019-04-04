@@ -8,7 +8,7 @@ export {
 	ValidationResult,
 	validate,
 	validateInstallation,
-	validateConfigPresetJSON
+	validateConfigPresetJSON,
 } from './validations';
 
 // action stuff for patches
@@ -38,9 +38,7 @@ export {
 } from './utils/version';
 
 // package utilities
-export {
-	getPackageJSON
-} from './utils/package';
+export { getPackageJSON } from './utils/package';
 
 // templating utilities
 export { template } from './utils/template';

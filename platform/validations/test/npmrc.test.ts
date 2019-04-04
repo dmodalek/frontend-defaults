@@ -53,9 +53,7 @@ describe('Validations', () => {
 
 			expect(exceptions).toHaveLength(1);
 			expect(exceptions[0].patch).toEqual(['NPMRCPatch']);
-			expect(exceptions[0].message).toMatchInlineSnapshot(
-				`"Save exact is not enabled in your .npmrc file"`
-			);
+			expect(exceptions[0].message).toMatchInlineSnapshot(`"Save exact is not enabled in your .npmrc file"`);
 			expect(exceptions).toMatchSnapshot();
 		});
 	});

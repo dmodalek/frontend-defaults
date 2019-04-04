@@ -9,22 +9,26 @@ export type NPMRCAnalyzerResult = {
 export const npmrcAnalyzer = async (cwd: string, anayltics: NPMRCAnalyzerResult): Promise<ValidationResult[]> => {
 	if (anayltics.npmrc) {
 		if (!anayltics.npmrcSaveExactEnabled) {
-			return [{
-				level: ValidationSeverityLevel.error,
-				message: `Field "save-exact=true" is required in the .npmrc file`,
-				source: 'npmrcAnalyzer',
-				url: 'https://docs.npmjs.com/misc/config#save-exact'
-			}]
+			return [
+				{
+					level: ValidationSeverityLevel.error,
+					message: `Field "save-exact=true" is required in the .npmrc file`,
+					source: 'npmrcAnalyzer',
+					url: 'https://docs.npmjs.com/misc/config#save-exact',
+				},
+			];
 		}
 
 		// .npmrc present, save-exact enabled = no issues!
 		return [];
 	} else {
-		return [{
-			level: ValidationSeverityLevel.error,
-			message: `NPM configuration missing`,
-			source: 'npmrcAnalyzer',
-			url: 'https://docs.npmjs.com/misc/config#npmrc-files'
-		}]
+		return [
+			{
+				level: ValidationSeverityLevel.error,
+				message: `NPM configuration missing`,
+				source: 'npmrcAnalyzer',
+				url: 'https://docs.npmjs.com/misc/config#npmrc-files',
+			},
+		];
 	}
-}
+};

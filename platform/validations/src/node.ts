@@ -14,8 +14,8 @@ export const nodeValidation = async (cwd: string, analytics: NodeAnalyzerResult)
 			validations.push({
 				level: ValidationSeverityLevel.info,
 				message: `The .nvmrc file isn't required anymore, because it can also read .node-version files`,
-				source: 'licenseValidation'
-			})
+				source: 'licenseValidation',
+			});
 
 			// Check for update in the .nvmrc file
 			const definedNVMVersion = analytics.nodeVersionManagerInfo.nvm;
@@ -23,8 +23,8 @@ export const nodeValidation = async (cwd: string, analytics: NodeAnalyzerResult)
 				validations.push({
 					level: ValidationSeverityLevel.warning,
 					message: `Your .nvmrc version is set to ${definedNVMVersion}, Namics uses ${CURRENT_NODE_LTS}`,
-					source: 'licenseValidation'
-				})
+					source: 'licenseValidation',
+				});
 			}
 		} else {
 			// FIXME: NVM is not required by namics, because NVM will also read the .node-version file
@@ -37,17 +37,17 @@ export const nodeValidation = async (cwd: string, analytics: NodeAnalyzerResult)
 				validations.push({
 					level: ValidationSeverityLevel.warning,
 					message: `Your .node-version version is set to ${definedNodeVersion}, Namics uses ${CURRENT_NODE_LTS}`,
-					source: 'licenseValidation'
-				})
+					source: 'licenseValidation',
+				});
 			}
 		} else {
 			validations.push({
 				level: ValidationSeverityLevel.error,
 				message: `We require to provide a .node-version file for version managers`,
-				source: 'nodeValidation'
-			})
+				source: 'nodeValidation',
+			});
 		}
 	}
 
 	return validations;
-}
+};

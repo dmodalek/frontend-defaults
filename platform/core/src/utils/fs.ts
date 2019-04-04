@@ -1,12 +1,5 @@
 import { F_OK } from 'constants';
-import {
-	access,
-	appendFile,
-	readFile,
-	writeFile,
-	stat,
-	Stats
-} from 'fs';
+import { access, appendFile, readFile, writeFile, stat, Stats } from 'fs';
 import globby from 'globby';
 
 export async function getFileContents(path: string): Promise<string> {
@@ -67,10 +60,10 @@ export async function mergeFiles(
 				err
 					? reject(err)
 					: resolve({
-						merged: theoreticalMerge,
-						base: baseContents,
-						overrides: mergableContents,
-					});
+							merged: theoreticalMerge,
+							base: baseContents,
+							overrides: mergableContents,
+					  });
 			});
 		});
 	} catch (err) {
@@ -115,10 +108,10 @@ export async function mergeJSON<Result extends Object>(
 				err
 					? reject(err)
 					: resolve({
-						merged: rawObjectMerge,
-						base: baseContents,
-						overrides: mergableContents,
-					});
+							merged: rawObjectMerge,
+							base: baseContents,
+							overrides: mergableContents,
+					  });
 			});
 		});
 	} catch (err) {
@@ -135,9 +128,9 @@ export async function fileExists(path: string): Promise<boolean> {
 export async function directoryExists(path: string): Promise<boolean> {
 	return new Promise<boolean>((resolve) => {
 		access(path, (err) => {
-			resolve((err && err.code === 'ENOENT') ? false : true)
+			resolve(err && err.code === 'ENOENT' ? false : true);
 		});
-	})
+	});
 }
 
 export async function getStats(path: string): Promise<Stats | undefined> {

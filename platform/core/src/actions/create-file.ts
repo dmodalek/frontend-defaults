@@ -7,25 +7,22 @@ import { IRawFileSystemCreateAction } from './abstract';
  * @param {string} contents path to the file to merge
  * @author jbiasi
  */
-export async function createFile(
-    targetSourcePath: string,
-    contents: string,
-): Promise<IRawFileSystemCreateAction> {
-    try {
-        return await new Promise<IRawFileSystemCreateAction>((resolve) => {
-            return resolve({
-                target: targetSourcePath,
-                content: contents,
-                exec() {
-                    return new Promise<boolean>((resolve) => {
-                        writeFile(targetSourcePath, contents, err => {
-                            resolve(err ? false : true);
-                        });
-                    });
-                }
-            });
-        });
-    } catch (err) {
-        throw err;
-    }
+export async function createFile(targetSourcePath: string, contents: string): Promise<IRawFileSystemCreateAction> {
+	try {
+		return await new Promise<IRawFileSystemCreateAction>((resolve) => {
+			return resolve({
+				target: targetSourcePath,
+				content: contents,
+				exec() {
+					return new Promise<boolean>((resolve) => {
+						writeFile(targetSourcePath, contents, (err) => {
+							resolve(err ? false : true);
+						});
+					});
+				},
+			});
+		});
+	} catch (err) {
+		throw err;
+	}
 }

@@ -1,8 +1,8 @@
 export enum ValidationSeverityLevel {
-    debug = 'DEBUG',
-    info = 'INFO',
-    warning = 'WARNING',
-    error = 'ERROR',
+	debug = 'DEBUG',
+	info = 'INFO',
+	warning = 'WARNING',
+	error = 'ERROR',
 }
 
 /**
@@ -12,9 +12,9 @@ export enum ValidationSeverityLevel {
 type RequiredValidationPatch = [string, any];
 
 export type ValidationResult = {
-    message: string;
-    level: ValidationSeverityLevel;
-    source?: string;
-    url?: string,
-    patch?: (string | RequiredValidationPatch)[],
-}
+	message: string;
+	level: ValidationSeverityLevel;
+	source?: string;
+	url?: string;
+	patch?: (string | RequiredValidationPatch)[];
+};

@@ -12,7 +12,7 @@ type ProjectValidatorOptions = {
 export interface IProjectValidator {
 	context: IContext;
 	validation: ValidationException[];
-	validate(): Promise<RequiredValidationPatch[]>
+	validate(): Promise<RequiredValidationPatch[]>;
 }
 
 /**
@@ -36,7 +36,7 @@ export class ProjectValidator implements IProjectValidator {
 	constructor({ context, analyzer, validations = [] }: ProjectValidatorOptions) {
 		this.validations = validations;
 		this.analyzer = analyzer;
-		this.context = context
+		this.context = context;
 	}
 
 	/**
@@ -50,8 +50,9 @@ export class ProjectValidator implements IProjectValidator {
 
 			return Array.from(this.validation).reduce(
 				(prev: RequiredValidationPatch[], curr: ValidationException): RequiredValidationPatch[] => {
-					return [...prev, ...(curr.patches || [])]
-				}, [] as RequiredValidationPatch[]
+					return [...prev, ...(curr.patches || [])];
+				},
+				[] as RequiredValidationPatch[]
 			);
 		} catch (err) {
 			// do nothing at the moment ...

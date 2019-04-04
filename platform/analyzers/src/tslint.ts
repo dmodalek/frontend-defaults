@@ -2,8 +2,8 @@ import {
 	Analyzer,
 	DependencyInstallation,
 	fileExists,
-	getDependencyInstallation
-	} from '@namics/frontend-defaults-platform-core';
+	getDependencyInstallation,
+} from '@namics/frontend-defaults-platform-core';
 import { join } from 'path';
 
 export type TSLintAnalyzerResult = {
@@ -26,4 +26,4 @@ export const tslintAnalyzer = async (cwd: string): Promise<TSLintAnalyzerResult>
 	return {
 		tslint: doesTSLintExist,
 	};
-}
+};

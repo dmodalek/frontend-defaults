@@ -11,4 +11,4 @@ export const gitIgnoreAnalyzer = async (cwd: string): Promise<GitIgnoreAnalyzerR
 	return {
 		gitignore: doesGitignoreExist,
 	};
-}
+};

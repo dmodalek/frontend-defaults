@@ -1,1 +1,3 @@
-export async function validate() { /* TODO: */ }
+export async function validate() {
+	/* TODO: */
+}

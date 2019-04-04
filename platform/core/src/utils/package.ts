@@ -23,4 +23,4 @@ export const getPackageJSON = async (cwd: string): Promise<IPackage> => {
 
 	cache[cwd] = pkg;
 	return pkg;
-}
+};

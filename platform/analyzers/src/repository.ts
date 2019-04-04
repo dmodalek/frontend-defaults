@@ -1,39 +1,45 @@
-import { fileExists, getStats, getJSON, DependencyInstallation, getDependencyInstallation } from '@namics/frontend-defaults-platform-core';
+import {
+	fileExists,
+	getStats,
+	getJSON,
+	DependencyInstallation,
+	getDependencyInstallation,
+} from '@namics/frontend-defaults-platform-core';
 import { join } from 'path';
 
 export type RepositoryAnalyzerResult = {
 	size: {
-		source: number,
-		vendor: number
-	},
-	projectType: 'default' | 'angular' | 'react',
-	lerna: boolean,
-	lernaProjectInformation: LernaConfiguration | undefined,
-	lernaInstallation: DependencyInstallation | undefined,
-	nx: boolean,
-	nxProjectInformation: NxConfiguration | undefined,
-	nxInstallation: DependencyInstallation | undefined
+		source: number;
+		vendor: number;
+	};
+	projectType: 'default' | 'angular' | 'react';
+	lerna: boolean;
+	lernaProjectInformation: LernaConfiguration | undefined;
+	lernaInstallation: DependencyInstallation | undefined;
+	nx: boolean;
+	nxProjectInformation: NxConfiguration | undefined;
+	nxInstallation: DependencyInstallation | undefined;
 };
 
 export type LernaConfiguration = {
-	packages: string[],
-	version: string,
-	npmClient?: string
-}
+	packages: string[];
+	version: string;
+	npmClient?: string;
+};
 
 type NxProject = {
-	tags?: string[],
-}
+	tags?: string[];
+};
 
 export type NxConfiguration = {
-	npmScope: string,
+	npmScope: string;
 	projects: {
-		[name: string]: NxProject
-	},
+		[name: string]: NxProject;
+	};
 	implicitDependencies?: {
-		[dependency: string]: string
-	}
-}
+		[dependency: string]: string;
+	};
+};
 
 export const repositoryAnalyzer = async (cwd: string): Promise<RepositoryAnalyzerResult> => {
 	const LERNA_PATH = join(cwd, 'lerna.json');
@@ -41,14 +47,13 @@ export const repositoryAnalyzer = async (cwd: string): Promise<RepositoryAnalyze
 
 	const lernaExists = await fileExists(LERNA_PATH);
 	const nxExists = await fileExists(NX_PATH);
-	const rootStats = await getStats(cwd) || ({ size: -1 } as any);
-	const vendorStats = await getStats(join(cwd, 'node_modules')) || ({ size: -1 } as any);
+	const rootStats = (await getStats(cwd)) || ({ size: -1 } as any);
+	const vendorStats = (await getStats(join(cwd, 'node_modules'))) || ({ size: -1 } as any);
 
 	const reactInstallation = await getDependencyInstallation(cwd, 'react');
 	const isReactProject = Boolean(reactInstallation.declared);
 	const angularInstallation = await getDependencyInstallation(cwd, '@angular/core');
 	const isAngularProject = Boolean(angularInstallation.declared);
-
 
 	let lernaProjectInformation: LernaConfiguration | undefined;
 	let lernaInstallation: DependencyInstallation | undefined;
@@ -68,9 +73,9 @@ export const repositoryAnalyzer = async (cwd: string): Promise<RepositoryAnalyze
 	return {
 		size: {
 			source: rootStats.size,
-			vendor: vendorStats.size
+			vendor: vendorStats.size,
 		},
-		projectType: isReactProject ? 'react' : (isAngularProject ? 'angular' : 'default'),
+		projectType: isReactProject ? 'react' : isAngularProject ? 'angular' : 'default',
 		lerna: lernaExists,
 		lernaProjectInformation,
 		lernaInstallation,
@@ -78,4 +83,4 @@ export const repositoryAnalyzer = async (cwd: string): Promise<RepositoryAnalyze
 		nxProjectInformation,
 		nxInstallation,
 	};
-}
+};

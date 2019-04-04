@@ -26,8 +26,8 @@ describe('Analyzers', () => {
 			expect(analytics.tslintInstallation!.installed).toEqual('5.15.0');
 			expect(analytics).toMatchSnapshot({
 				tslintInstallation: {
-					"latest": expect.any(String)
-				}
+					latest: expect.any(String),
+				},
 			});
 		});
 
@@ -38,8 +38,8 @@ describe('Analyzers', () => {
 			expect(analytics.tslintInstallation!.installed).toBeFalsy();
 			expect(analytics).toMatchSnapshot({
 				tslintInstallation: {
-					"latest": expect.any(String)
-				}
+					latest: expect.any(String),
+				},
 			});
 		});
 	});

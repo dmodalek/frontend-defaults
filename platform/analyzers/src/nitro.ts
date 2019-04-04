@@ -16,7 +16,7 @@ type NitroConfigType = {
 	'generator-nitro'?: {
 		templateEngine: string;
 	};
-}
+};
 
 export const nitroAnalyzer = async (cwd: string): Promise<NitroAnalyzerResult> => {
 	const yeomanPath = join(cwd, '.yo-rc.json');
@@ -38,4 +38,4 @@ export const nitroAnalyzer = async (cwd: string): Promise<NitroAnalyzerResult> =
 	return {
 		nitro: false,
 	};
-}
+};
