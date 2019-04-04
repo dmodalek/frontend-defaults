@@ -37,7 +37,7 @@ export const nodeValidation = async (cwd: string, analytics: NodeAnalyzerResult)
 				validations.push({
 					level: ValidationSeverityLevel.warning,
 					message: `Your .node-version version is set to ${definedNodeVersion}, Namics uses ${CURRENT_NODE_LTS}`,
-					source: 'licenseValidation',
+					source: 'nodeValidation',
 				});
 			}
 		} else {

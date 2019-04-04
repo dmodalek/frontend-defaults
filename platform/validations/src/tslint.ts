@@ -14,7 +14,7 @@ export const tslintValidation = async (
 		validationResults = validationResults.concat(
 			validateInstallation({
 				installation: analytics.tslintInstallation,
-				name: 'ESLint',
+				name: 'TSLint',
 				source: 'tslintValidation',
 			})
 		);
@@ -25,11 +25,11 @@ export const tslintValidation = async (
 	// only add issue when typescript is used
 	return analytics.typescript
 		? [
-				{
-					level: ValidationSeverityLevel.error,
-					message: 'TSLint configuration missing',
-					source: 'eslintValidation',
-				},
-		  ]
+			{
+				level: ValidationSeverityLevel.error,
+				message: 'TSLint configuration missing',
+				source: 'tslintValidation',
+			},
+		]
 		: [];
 };

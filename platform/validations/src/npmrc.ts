@@ -6,14 +6,14 @@ export type NPMRCAnalyzerResult = {
 	npmrcSaveExactEnabled?: boolean;
 };
 
-export const npmrcAnalyzer = async (cwd: string, anayltics: NPMRCAnalyzerResult): Promise<ValidationResult[]> => {
+export const npmrcValidation = async (cwd: string, anayltics: NPMRCAnalyzerResult): Promise<ValidationResult[]> => {
 	if (anayltics.npmrc) {
 		if (!anayltics.npmrcSaveExactEnabled) {
 			return [
 				{
 					level: ValidationSeverityLevel.error,
 					message: `Field "save-exact=true" is required in the .npmrc file`,
-					source: 'npmrcAnalyzer',
+					source: 'npmrcValidation',
 					url: 'https://docs.npmjs.com/misc/config#save-exact',
 				},
 			];
@@ -26,7 +26,7 @@ export const npmrcAnalyzer = async (cwd: string, anayltics: NPMRCAnalyzerResult)
 			{
 				level: ValidationSeverityLevel.error,
 				message: `NPM configuration missing`,
-				source: 'npmrcAnalyzer',
+				source: 'npmrcValidation',
 				url: 'https://docs.npmjs.com/misc/config#npmrc-files',
 			},
 		];
