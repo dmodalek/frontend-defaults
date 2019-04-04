@@ -4,7 +4,8 @@ import {
 	appendFile,
 	readFile,
 	writeFile,
-	stat
+	stat,
+	Stats
 } from 'fs';
 import globby from 'globby';
 
@@ -137,6 +138,14 @@ export async function directoryExists(path: string): Promise<boolean> {
 			resolve((err && err.code === 'ENOENT') ? false : true)
 		});
 	})
+}
+
+export async function getStats(path: string): Promise<Stats | undefined> {
+	return new Promise<Stats | undefined>((resolve) => {
+		stat(path, (err, stat) => {
+			resolve(stat);
+		});
+	});
 }
 
 export async function findFilesByPattern(cwd: string = process.cwd(), pattern: string | string[]): Promise<string[]> {

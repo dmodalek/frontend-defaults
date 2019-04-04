@@ -41,6 +41,10 @@ export async function getInstalledDependencyVersion(cwd: string = process.cwd(),
 	}
 }
 
+export function dependencyIsOutdated(installedVersion: string, availableLatestVersion: string): boolean {
+	return semver.lt(installedVersion, availableLatestVersion);
+}
+
 export async function checkDependencyUpdate(
 	cwd: string = process.cwd(),
 	dependency: string
@@ -72,6 +76,10 @@ export async function checkDependencyUpdate(
 			upgradable: false,
 		};
 	}
+}
+
+export function versionSatisfaction(current: string, needToSatisfy: string) {
+	return semver.satisfies(current, needToSatisfy);
 }
 
 export async function getLatestLTSVersion(dependency: string): Promise<string> {
